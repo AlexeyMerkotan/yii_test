@@ -18,7 +18,7 @@ class m161020_065645_create_project_table extends Migration
             $tableOptions = 'CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE=InnoDB';
         }
 
-        $this->createTable('project', [
+        $this->createTable('{{%project}}', [
             'id' => $this->primaryKey(),
             'name' => $this->string()->notNull(),
             'description' => $this->text()->defaultValue(null),

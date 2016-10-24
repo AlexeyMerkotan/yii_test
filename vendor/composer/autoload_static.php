@@ -23,6 +23,7 @@ class ComposerStaticInitf7d7cb119b69cacb4e4b992aa7bc9bb3
             'yii\\codeception\\' => 16,
             'yii\\bootstrap\\' => 14,
             'yii\\' => 4,
+            'yii2fullcalendar\\' => 17,
         ),
         'k' => 
         array (
@@ -77,6 +78,10 @@ class ComposerStaticInitf7d7cb119b69cacb4e4b992aa7bc9bb3
         'yii\\' => 
         array (
             0 => __DIR__ . '/..' . '/yiisoft/yii2',
+        ),
+        'yii2fullcalendar\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/philippfrenzel/yii2fullcalendar',
         ),
         'kartik\\plugins\\dateformatter\\' => 
         array (

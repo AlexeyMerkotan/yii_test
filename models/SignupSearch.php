@@ -21,7 +21,7 @@ class SignupSearch extends User
     {
 
         return [
-            [['id', 'created_at', 'updated_at', 'status', 'bithday', 'country_id'], 'integer'],
+            [['id', 'created_at', 'updated_at', 'status', 'country_id'], 'integer'],
             [['email', 'auth_key', 'password_hash', 'color', 'phone', 'city', 'zip', 'address'], 'safe'],
 
             [['bithday'], 'date', 'format' => 'Y-m-d'],

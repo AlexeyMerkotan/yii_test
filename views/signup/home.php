@@ -6,11 +6,28 @@
 
 use yii\helpers\Html;
 use yii\bootstrap\ActiveForm;
+use kartik\color\ColorInput;
+use yii\grid\GridView;
+
+
+
 
 $this->title = 'Home';
 ?>
 <div class="site-login">
     <h1><?= Html::encode($this->title) ?></h1>
+
+
+    <?php $form = ActiveForm::begin(); ?>
+
+
+
+    <?= \yii2fullcalendar\yii2fullcalendar::widget(array('events'=> $events,));?>
+
+
+
+
+    <?php ActiveForm::end(); ?>
 
 
 

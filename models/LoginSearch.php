@@ -5,7 +5,10 @@ namespace app\models;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
+
+use yii\web\IdentityInterface;
 use app\models\User;
+
 
 /**
  * LoginSearch represents the model behind the search form about `app\models\User`.
@@ -18,6 +21,7 @@ class LoginSearch extends User
 
     public  $email;
     public  $password;
+    public  $rememberMe= true;
     private $_user;
 
     public function rules()
@@ -30,6 +34,9 @@ class LoginSearch extends User
 
             ['password','required'],
             ['password', 'string', 'min' => 6],
+            ['password' ,'validatePassword'],
+
+            ['rememberMe', 'boolean'],
         ];
     }
 
@@ -109,19 +116,27 @@ class LoginSearch extends User
 
 
 
+    public function validatePassword($attribute, $params)
+    {
+        if (!$this->hasErrors()) {
+            $user = $this->getUser();
+            if (!$user || !$user->validatePassword($this->password)) {
+                $this->addError($attribute, 'Incorrect username or password.');
+            }
+        }
+    }
+
+
     public function login()
     {
         if ($this->validate()) {
-            return Yii::$app->user->login($this->getUser());
+            return Yii::$app->user->login($this->getUser(),$this->rememberMe ? 3600 * 24 * 30 : 0);
         } else {
             return false;
         }
     }
 
-    public function validatePassword($password)
-    {
-        return Yii::$app->security->validatePassword($password, $this->_user->password_hash);
-    }
+
 
 
     /**
@@ -133,13 +148,7 @@ class LoginSearch extends User
     {
         if ($this->_user === null) {
             $this->_user = User::findByUsername($this->email);
-           /* if($this->validatePassword($this->password));
-            {
-                $session = Yii::$app->session;
-                $session['flag'] = true;
-            }*/
         }
-
         return $this->_user;
     }
 
