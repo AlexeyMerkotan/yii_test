@@ -31,10 +31,22 @@ class Project extends \yii\db\ActiveRecord
         return [
             [['name'], 'required'],
             [['description'], 'string'],
-            [['start_at', 'end_at'], 'integer'],
             [['name'], 'string', 'max' => 255],
+
+            [['start_at','end_at'], 'date', 'format' => 'Y-m-d'],
         ];
     }
+
+    public function afterValidate()
+    {
+        if (!empty($this->start_at)&&!empty($this->end_at)) {
+            $this->start_at = strtotime($this->start_at);
+            $this->end_at=strtotime($this->end_at);
+        }
+        return parent::afterValidate();
+    }
+
+
 
     /**
      * @inheritdoc

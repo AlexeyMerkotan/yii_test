@@ -44,21 +44,19 @@ AppAsset::register($this);
     echo Nav::widget([
         'options' => ['class' => 'navbar-nav navbar-right'],
         'items' => [
-           // ['label' => 'Sign up', 'url' => ['/signup/signup']],
-            Yii::$app->user->isGuest ? (
-            ['label' => 'Sign up', 'url' => ['/signup/signup']]
+            ['label' => 'User', 'url' => ['/user/index']],
+            ['label' => 'Project', 'url' => ['/project/index']],
+            Yii::$app->user->isGuest ?
+            ['label' => 'Sign up', 'url' => ['/signup/signup'],
+                'label' => 'Login', 'url' => ['/signup/login']
+            ]
 
-            ) : (
-            ['label' => 'Profile', 'url' => ['/signup/profile']]
+             :
+            ['label' => 'Profile', 'url' => ['/signup/profile'],
+                'label' => 'Logout ('. Yii::$app->user->identity->email . ')', 'url' => ['/signup/logout']
+            ]
 
-            ),
-            Yii::$app->user->isGuest ? (
-                ['label' => 'Login', 'url' => ['/signup/login']]
 
-            ) : (
-                 ['label' => 'Logout ('. Yii::$app->user->identity->email . ')', 'url' => ['/signup/logout']]
-
-            )
         ],
     ]);
     NavBar::end();

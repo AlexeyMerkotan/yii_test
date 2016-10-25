@@ -18,10 +18,13 @@ class ProjectSearch extends Project
     public function rules()
     {
         return [
-            [['id', 'start_at', 'end_at'], 'integer'],
+            [['id',], 'integer'],
             [['name', 'description'], 'safe'],
+            [['start_at','end_at'], 'date', 'format' => 'Y-m-d'],
         ];
     }
+
+
 
     /**
      * @inheritdoc

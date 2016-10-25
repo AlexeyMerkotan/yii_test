@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use app\models\Project;
 use Yii;
 use app\models\User;
 use app\models\CountrySearch;
@@ -11,7 +12,11 @@ use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\web\UploadedFile;
 use app\models\LoginSearch;
+use app\models\UserProject;
+use app\models\Calendar;
 use yii\data\Pagination;
+use \yii\helpers\ArrayHelper;
+use yii\helpers\Json;
 
 /**
  * SignupController implements the CRUD actions for Users model.
@@ -79,60 +84,55 @@ class SignupController extends Controller
         }
     }
 
+
+    public function actionSelect(){
+        $select=$_POST['select'];
+        $query=UserProject::find()->all();
+        $arr=[];
+        foreach ($query as $item) {
+            if($item->id_user==$select){
+                $arr[$item->project];
+                $project=Project::find()->all();
+                foreach ($project as $value){
+                    $arr[$value->name];
+                }
+            }
+        }
+        echo arr;
+    }
+
+
     public function actionHome()
     {
 
             if(!Yii::$app->user->isGuest) {
 
 
-                $query = User::find();
-
-
-                $countries = $query->all();
+                $query = Calendar::find()->all();
 
 
                 $events = array();
-                foreach ( $countries as $value){
+                foreach ($query as $userproject){
+                    $project = Project::findOne($userproject->id_project);
 
-
-                    //Testing
+                    $user = User::findOne($userproject->id_user);
                     $Event = new \yii2fullcalendar\models\Event();
-                    $Event->id = 3;
-                    $Event->title = 'Testing';
-                    $Event->color=$value->color;
-                    $Event->start = date('Y-m-d\Th:m:s\Z');
-                    $events[] = $Event;
-
-                    $Event = new \yii2fullcalendar\models\Event();
-                    $Event->id = 4;
-                    $Event->title = 'Testing';
-                    $Event->color=$value->color;
-                    $Event->start = date('Y-m-d\Th:m:s\Z',strtotime('tomorrow 6am'));
+                    $Event->id = $userproject->id_project;
+                    $Event->title = $userproject->comment;
+                    $Event->color=$user->color;
+                    $Event->start = date('Y-m-d\TH:i:s\Z',$userproject->start_at);
+                    $Event->end = date('Y-m-d\TH:i:s\Z',$userproject->end_at);
                     $events[] = $Event;
                 }
-
-                foreach ( $countries as $value){
-
-
-                    //Testing
-                    $Event = new \yii2fullcalendar\models\Event();
-                    $Event->id = 1;
-                    $Event->title = 'Testing';
-                    $Event->color=$value->color;
-                    $Event->start = date('2016-10-16\Th:m:s\Z');
-                    $events[] = $Event;
-
-                    $Event = new \yii2fullcalendar\models\Event();
-                    $Event->id = 2;
-                    $Event->title = 'Testing';
-                    $Event->color=$value->color;
-                    $Event->start = date('2016-10-10\Th:m:s\Z');
-                    $events[] = $Event;
-                }
-
-                $user=new User();
+                $itemuser=ArrayHelper::map(User::find()->all(),'id','name');
+                $itemproject=ArrayHelper::map(Project::find()->all(),'id','name');
+                $calendar = new Calendar();
                 return $this->render('home',['events'=>$events,
-                    'model' => $user,
+                    'calendar' => $calendar,
+                    'itemuser'=>$itemuser,
+                    'itemproject'=>$itemproject,
+
+
                 ]);
             }else{
                 return $this->redirect(['login']);
@@ -155,8 +155,34 @@ class SignupController extends Controller
 
 
 
-    public function actionUpdate(){
-        return $this->redirect(['home']);
+    public function actionSave(){
+        $model=new Calendar();//or user
+
+        $var=$model->load(Yii::$app->request->port());
+
+        if($model->load(Yii::$app->request->port())/*&& $model->save()*/)
+            return $this->redirect([
+                'view']);
+        else
+            return $this->readerAjax('create',[
+                'model' => $model,
+            ]);
+    }
+    public function actionUpdate($start_at){
+
+
+        $model=new Calendar();//or user
+
+        //$model->start_at=$date;
+
+        if($model->load(Yii::$app->request->post()) && $model->save())
+            return $this->redirect([
+                'view']);
+        else
+            return $this->readerAjax('create',[
+                'model' => $model,
+            ]);
+       // return $this->redirect(['home']);
     }
     public function actionSignup()
     {
@@ -167,6 +193,8 @@ class SignupController extends Controller
                 $model->setPassword($model->password);
 
                 $model->generateAuthKey();
+
+                $model->status();
 
                 if (Yii::$app->request->isPost){
 

@@ -5,38 +5,22 @@ namespace app\models;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-
-use yii\web\IdentityInterface;
 use app\models\User;
 
-
 /**
- * LoginSearch represents the model behind the search form about `app\models\User`.
+ * UserSearch represents the model behind the search form about `app\models\User`.
  */
-class LoginSearch extends User
+class UserSearch extends User
 {
     /**
      * @inheritdoc
      */
-
-    public  $email;
-    public  $password;
-    public  $rememberMe= true;
-    private $_user;
-
     public function rules()
     {
         return [
-            ['email', 'trim'],
-            ['email', 'required'],
-            ['email', 'email'],
-            ['email', 'string', 'max' => 255],
-
-            ['password','required'],
-            ['password', 'string', 'min' => 6],
-            ['password' ,'validatePassword'],
-
-            ['rememberMe', 'boolean'],
+            [['id', 'created_at', 'updated_at', 'status', 'bithday', 'country_id'], 'integer'],
+            [['name', 'email', 'auth_key', 'password_hash', 'color', 'phone', 'city', 'zip', 'address', 'avatar'], 'safe'],
+            [['bithday'], 'date', 'format' => 'Y-m-d'],
         ];
     }
 
@@ -97,60 +81,4 @@ class LoginSearch extends User
 
         return $dataProvider;
     }
-
-
-
-    /**
-     * Validates the password.
-     * This method serves as the inline validation for password.
-     *
-     * @param string $attribute the attribute currently being validated
-     * @param array $params the additional name-value pairs given in the rule
-     */
-
-    /**
-     * Logs in a user using the provided username and password.
-     *
-     * @return boolean whether the user is logged in successfully
-     */
-
-
-
-    public function validatePassword($attribute, $params)
-    {
-        if (!$this->hasErrors()) {
-            $user = $this->getUser();
-            if (!$user || !$user->validatePassword($this->password)) {
-                $this->addError($attribute, 'Incorrect username or password.');
-            }
-        }
-    }
-
-
-    public function login()
-    {
-        if ($this->validate()) {
-            return Yii::$app->user->login($this->getUser(),$this->rememberMe ? 3600 * 24 * 30 : 0);
-        } else {
-            return false;
-        }
-    }
-
-
-
-
-    /**
-     * Finds user by [[username]]
-     *andentivandentiv
-     * @return User|null
-     */
-    protected function getUser()
-    {
-        if ($this->_user === null) {
-            $this->_user = User::findByUsername($this->email);
-        }
-        if($this->_user->status=='1')
-            return $this->_user;
-    }
-
 }

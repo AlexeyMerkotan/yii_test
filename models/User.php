@@ -70,7 +70,6 @@ class User extends ActiveRecord implements IdentityInterface
 
             [['updated_at'], 'date', 'format' => 'Y-m-d'],
 
-            ['password','required'],
             ['password', 'string', 'min' => 6],
 
 
@@ -144,6 +143,11 @@ class User extends ActiveRecord implements IdentityInterface
     public function generateAuthKey()
     {
         $this->auth_key = Yii::$app->security->generateRandomString();
+    }
+
+    public function status()
+    {
+        $this->status = '0';
     }
 
 

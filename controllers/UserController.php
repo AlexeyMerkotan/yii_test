@@ -3,24 +3,16 @@
 namespace app\controllers;
 
 use Yii;
-use app\models\Project;
-use app\models\ProjectSearch;
+use app\models\User;
+use app\models\UserSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
-use app\models\User;
-use app\models\CountrySearch;
-use app\models\SignupSearch;
-use yii\web\UploadedFile;
-use app\models\LoginSearch;
-use yii\data\Pagination;
-use app\models\UserSearch;
-
 
 /**
- * ProjectController implements the CRUD actions for Project model.
+ * UserController implements the CRUD actions for User model.
  */
-class ProjectController extends Controller
+class UserController extends Controller
 {
     /**
      * @inheritdoc
@@ -38,55 +30,48 @@ class ProjectController extends Controller
     }
 
     /**
-     * Lists all Project models.
+     * Lists all User models.
      * @return mixed
      */
     public function actionIndex()
     {
-            if(!Yii::$app->user->isGuest){
-                $searchModel = new ProjectSearch();
-                $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        if(!Yii::$app->user->isGuest) {
+            $searchModel = new UserSearch();
+            $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
-                return $this->render('index', [
-                    'searchModel' => $searchModel,
-                    'dataProvider' => $dataProvider,
-                ]);
-            }
-            else{
-                return $this->redirect(['/signup']);
-            }
-
-
-
+            return $this->render('index', [
+                'searchModel' => $searchModel,
+                'dataProvider' => $dataProvider,
+            ]);
+        }else
+            return $this->redirect(['/signup']);
     }
 
     /**
-     * Displays a single Project model.
+     * Displays a single User model.
      * @param integer $id
      * @return mixed
      */
     public function actionView($id)
     {
-        if(!Yii::$app->user->isGuest){
+        if(!Yii::$app->user->isGuest) {
             return $this->render('view', [
                 'model' => $this->findModel($id),
             ]);
-        }
-        else{
+        }else
             return $this->redirect(['/signup']);
-        }
 
     }
 
     /**
-     * Creates a new Project model.
+     * Creates a new User model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
     public function actionCreate()
     {
-        if(!Yii::$app->user->isGuest){
-            $model = new Project();
+        if(!Yii::$app->user->isGuest) {
+            $model = new User();
 
             if ($model->load(Yii::$app->request->post()) && $model->save()) {
                 return $this->redirect(['view', 'id' => $model->id]);
@@ -95,22 +80,20 @@ class ProjectController extends Controller
                     'model' => $model,
                 ]);
             }
-        }
-        else{
+        }else
             return $this->redirect(['/signup']);
-        }
 
     }
 
     /**
-     * Updates an existing Project model.
+     * Updates an existing User model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
      * @return mixed
      */
     public function actionUpdate($id)
     {
-        if(!Yii::$app->user->isGuest){
+        if(!Yii::$app->user->isGuest) {
             $model = $this->findModel($id);
 
             if ($model->load(Yii::$app->request->post()) && $model->save()) {
@@ -120,42 +103,38 @@ class ProjectController extends Controller
                     'model' => $model,
                 ]);
             }
-        }
-        else{
+        }else
             return $this->redirect(['/signup']);
-        }
 
     }
 
     /**
-     * Deletes an existing Project model.
+     * Deletes an existing User model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
      * @return mixed
      */
     public function actionDelete($id)
     {
-        if(!Yii::$app->user->isGuest){
+        if(!Yii::$app->user->isGuest) {
             $this->findModel($id)->delete();
 
             return $this->redirect(['index']);
-        }
-        else{
+        }else
             return $this->redirect(['/signup']);
-        }
 
     }
 
     /**
-     * Finds the Project model based on its primary key value.
+     * Finds the User model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
-     * @return Project the loaded model
+     * @return User the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = Project::findOne($id)) !== null) {
+        if (($model = User::findOne($id)) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
