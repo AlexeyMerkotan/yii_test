@@ -21,7 +21,7 @@ class UserProject extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return 'user_project';
+        return '{{%user_project}}';
     }
 
     /**

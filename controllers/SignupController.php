@@ -85,28 +85,111 @@ class SignupController extends Controller
     }
 
 
-    public function actionSelect(){
-        $select=$_POST['select'];
+
+
+    public function actionSelect($select){
+
+
         $query=UserProject::find()->all();
         $arr=[];
         foreach ($query as $item) {
             if($item->id_user==$select){
-                $arr[$item->project];
-                $project=Project::find()->all();
-                foreach ($project as $value){
-                    $arr[$value->name];
-                }
+                $project=Project::findOne($item->id_project);
+                $array = [
+                    'id'=>$project->id,
+                    'name'=>$project->name,
+                ];
+                $arr[]=$array;
             }
         }
-        echo arr;
+        echo Json::encode($arr);
     }
 
+
+    public function actionCreate(){
+
+
+        $calendar = new Calendar();
+
+        $calendar->id_user=$_POST['id_user'];
+        $calendar->id_project=$_POST['id_project'];
+        $calendar->start_at=$_POST['start_at'];
+        $calendar->end_at=$_POST['end_at'];
+        $calendar->comment=$_POST['comment'];
+        $project = Project::findOne($calendar->id_project);
+        $user=User::findOne($calendar->id_user);
+        $calendar->save();
+        $array = [
+            'project'=>$project->name,
+            'start_at'=>date('Y-m-d\TH:i:s\Z',$calendar->start_at),
+            'end_at'=>date('Y-m-d\TH:i:s\Z',$calendar->end_at),
+            'color'=>$user->color,
+        ];
+        $arr[]=$array;
+        echo Json::encode($arr);
+
+
+    }
+
+
+    public function actionSelectview(){
+        $query=User::find()->all();
+        $arr=[];
+        foreach ($query as $item) {
+                $array = [
+                    'id'=>$item->id,
+                    'name'=>$item->name,
+                ];
+                $arr[]=$array;
+        }
+        echo Json::encode($arr);
+    }
+    public function actionUpdate(){
+
+        $model=new Calendar();
+        if($model->load(Yii::$app->request->post()) && $model->save())
+            return $this->redirect([
+                'home']);
+        else
+            return $this->redirect([
+                'home']);
+
+    }
+
+    public function actionDetermine($id){
+        $model = Calendar::findOne($id);
+        $arr=[];
+            $array = [
+                'id_user'=>$model->id_user,
+                'id_project'=>$model->id_project,
+                'start_at'=>$model->start_at,
+                'end_at'=>$model->end_at,
+                'comment'=>$model->comment,
+            ];
+            $arr[]=$array;
+        echo Json::encode($arr);
+
+    }
+
+    public function actionDelete($id)
+    {
+        if(!Yii::$app->user->isGuest){
+            $this->findModel($id)->delete();
+
+            return $this->redirect(['index']);
+        }
+        else{
+            return $this->redirect(['/signup']);
+        }
+
+    }
 
     public function actionHome()
     {
 
             if(!Yii::$app->user->isGuest) {
 
+                $calendar = new Calendar();
 
                 $query = Calendar::find()->all();
 
@@ -118,19 +201,15 @@ class SignupController extends Controller
                     $user = User::findOne($userproject->id_user);
                     $Event = new \yii2fullcalendar\models\Event();
                     $Event->id = $userproject->id_project;
-                    $Event->title = $userproject->comment;
+                    $Event->title = " Project(".$project->name.")";
                     $Event->color=$user->color;
                     $Event->start = date('Y-m-d\TH:i:s\Z',$userproject->start_at);
                     $Event->end = date('Y-m-d\TH:i:s\Z',$userproject->end_at);
                     $events[] = $Event;
                 }
-                $itemuser=ArrayHelper::map(User::find()->all(),'id','name');
-                $itemproject=ArrayHelper::map(Project::find()->all(),'id','name');
-                $calendar = new Calendar();
+
                 return $this->render('home',['events'=>$events,
                     'calendar' => $calendar,
-                    'itemuser'=>$itemuser,
-                    'itemproject'=>$itemproject,
 
 
                 ]);
@@ -168,22 +247,7 @@ class SignupController extends Controller
                 'model' => $model,
             ]);
     }
-    public function actionUpdate($start_at){
 
-
-        $model=new Calendar();//or user
-
-        //$model->start_at=$date;
-
-        if($model->load(Yii::$app->request->post()) && $model->save())
-            return $this->redirect([
-                'view']);
-        else
-            return $this->readerAjax('create',[
-                'model' => $model,
-            ]);
-       // return $this->redirect(['home']);
-    }
     public function actionSignup()
     {
         if(Yii::$app->user->isGuest){

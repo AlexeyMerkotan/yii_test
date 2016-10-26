@@ -33,12 +33,14 @@ $datePickerRange = (date('Y') - 100) . ':' . date('Y');
     <?php //$form->field($model, 'color')->textInput(['maxlength' => true]) ?>
 
 
-    <?= $form->field($model, 'bithday', ['options' => ['class' => 'hidden1']])->textInput(['value' => !empty($model->bithday) ? date('Y-m-d', $model->bithday) : null]) ?>
+    <?= $form->field($model, 'bithday', ['options' => ['class' => 'hidden2']])->textInput(['value' => !empty($model->bithday) ? date('Y-m-d', $model->bithday) : null]) ?>
 
     <?= $form->field($model, 'bithday')->widget(DatePicker::classname(), [
         'clientOptions' => ['changeMonth' => true, 'changeYear' => true, 'yearRange' => $datePickerRange, 'altFormat' => 'yy-mm-dd', 'altField' => '#user-bithday'],
         'options' => ['class' => 'form-control', 'readonly' => true, 'id' => 'date-picker', 'name' => 'date-picker']
     ]) ?>
+
+
 
     <?= $form->field($model, 'phone')->textInput() ?>
 

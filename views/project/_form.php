@@ -36,7 +36,7 @@ $datePickerRange = (date('Y') - 100) . ':' . date('Y');
 
     <?= $form->field($model, 'end_at')->widget(DatePicker::classname(), [
         'clientOptions' => ['changeMonth' => true, 'changeYear' => true, 'yearRange' => $datePickerRange, 'altFormat' => 'yy-mm-dd', 'altField' => '#project-end_at'],
-        'options' => ['class' => 'form-control', 'readonly' => true, 'id' => 'date-picker1', 'name' => 'date-picker1']
+        'options' => ['class' => 'form-control', 'readonly' => true, 'id' => 'date-picker2', 'name' => 'date-picker2']
     ]) ?>
 
 
