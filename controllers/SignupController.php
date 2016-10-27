@@ -85,8 +85,58 @@ class SignupController extends Controller
     }
 
 
+    public function actionChechviewuser($id){
+        $calendar=Calendar::find()->where(['id_user'=>$id])->all();
+        $arr=[];
+        foreach ($calendar as $item) {
+            $project = Project::findOne($item->id_project);
+            $user=User::findOne($item->id_user);
+            $array = [
+                'project'=>$project->name,
+                'id'=>$item->id,
+                'start_at'=> date('Y-m-d',$item->start_at),
+                'end_at'=>date('Y-m-d',$item->end_at),
+                'color'=>$user->color,
+
+            ];
+            $arr[]=$array;
+        }
+        echo Json::encode($arr);
+    }
 
 
+    //checkbox filter
+    public function actionChechuser($id){
+
+        $user=Calendar::find()->where(['id_user'=>$id])->all();
+        $arr=[];
+        foreach ($user as $item) {
+            $array = [
+                'id'=>$item->id,
+            ];
+            $arr[]=$array;
+        }
+        echo Json::encode($arr);
+
+    }
+
+    public function actionChechproject($id){
+
+        $user=Calendar::find()->where(['id_project'=>$id])->all();
+        $arr=[];
+        foreach ($user as $item) {
+            $array = [
+                'id'=>$item->id,
+            ];
+            $arr[]=$array;
+        }
+        echo Json::encode($arr);
+
+    }
+
+
+
+    //select project
     public function actionSelect($select){
 
 
@@ -105,7 +155,7 @@ class SignupController extends Controller
         echo Json::encode($arr);
     }
 
-
+    //save data calendar
     public function actionCreate(){
 
 
@@ -131,7 +181,7 @@ class SignupController extends Controller
 
     }
 
-
+    //select user
     public function actionSelectview(){
         $query=User::find()->all();
         $arr=[];
@@ -144,45 +194,38 @@ class SignupController extends Controller
         }
         echo Json::encode($arr);
     }
+
+    //save update calendaar
     public function actionUpdate(){
 
-        $model=new Calendar();
-        if($model->load(Yii::$app->request->post()) && $model->save())
-            return $this->redirect([
-                'home']);
-        else
-            return $this->redirect([
-                'home']);
-
+        $calendar=Calendar::findOne($_POST['id']);
+        $calendar->id_user=$_POST['id_user'];
+        $calendar->id_project=$_POST['id_project'];
+        $calendar->start_at=$_POST['start_at'];
+        $calendar->end_at=$_POST['end_at'];
+        $calendar->comment=$_POST['comment'];
+        $calendar->save();
     }
 
+
+
+    //view update calendar
     public function actionDetermine($id){
         $model = Calendar::findOne($id);
-        $arr=[];
-            $array = [
-                'id_user'=>$model->id_user,
-                'id_project'=>$model->id_project,
-                'start_at'=>$model->start_at,
-                'end_at'=>$model->end_at,
-                'comment'=>$model->comment,
-            ];
-            $arr[]=$array;
-        echo Json::encode($arr);
+        echo Json::encode($model);
 
     }
 
-    public function actionDelete($id)
+
+
+    //delete date calendar
+    public function actionDelete()
     {
-        if(!Yii::$app->user->isGuest){
-            $this->findModel($id)->delete();
-
-            return $this->redirect(['index']);
-        }
-        else{
-            return $this->redirect(['/signup']);
-        }
+        Calendar::findOne($_POST['id'])->delete();
 
     }
+
+
 
     public function actionHome()
     {
@@ -200,16 +243,19 @@ class SignupController extends Controller
 
                     $user = User::findOne($userproject->id_user);
                     $Event = new \yii2fullcalendar\models\Event();
-                    $Event->id = $userproject->id_project;
+                    $Event->id = $userproject->id;
                     $Event->title = " Project(".$project->name.")";
                     $Event->color=$user->color;
                     $Event->start = date('Y-m-d\TH:i:s\Z',$userproject->start_at);
                     $Event->end = date('Y-m-d\TH:i:s\Z',$userproject->end_at);
                     $events[] = $Event;
                 }
-
+                $model=User::find()->all();
+                $project=Project::find()->all();
                 return $this->render('home',['events'=>$events,
                     'calendar' => $calendar,
+                    'model' => $model,
+                    'project' => $project,
 
 
                 ]);
@@ -217,6 +263,7 @@ class SignupController extends Controller
                 return $this->redirect(['login']);
             }
     }
+
     public function actionProfile(){
 
         if(!Yii::$app->user->isGuest) {
