@@ -131,17 +131,9 @@ $(function() {
 
             });
         */
-        var selected=$('input:checked').val();
-        var flag=$(this).prop( "checked" );
-        if(flag){
-            $.get('index.php?r=signup%2Fchechuser',{'id':selected},function(data){
-                var project=$.parseJSON(data);
-                $.each(project, function(key, value) {
-                    $('#calendar').fullCalendar('removeEvents', value.id);
-                })
-            });
-        }else{
-            $.get('index.php?r=signup%2Fchechviewuser',{'id':selected},function(data){
+          if($(this).is(":checked")){
+              var selected=$(this).val();
+               $.get('index.php?r=signup%2Fchechviewuser',{'id':selected},function(data){
                 var project=$.parseJSON(data);
                 $.each(project, function(key, value) {
                     var eventData = {
@@ -154,8 +146,15 @@ $(function() {
                     $('#calendar').fullCalendar('renderEvent', eventData, true);
                 })
             });
-        }
-
+          } else {
+              var selected=$(this).val();
+              $.get('index.php?r=signup%2Fchechuser',{'id':selected},function(data){
+                var project=$.parseJSON(data);
+                $.each(project, function(key, value) {
+                    $('#calendar').fullCalendar('removeEvents', value.id);
+                })
+            });
+          }
 
 
     });
