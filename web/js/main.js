@@ -113,6 +113,24 @@ $(function() {
 
 
     $(document).on('change','.user',function () {
+        /*
+        $(function(){
+
+            $(document).on('click','.user',function(){
+
+
+            //$('#user input:checked').each(function(){
+            //используй is
+                if($(this).is(":checked")) {alert("Вы активировали переключатель "+$(this).val()); } 
+               else {alert("Вы деактивировали переключатель"+$(this).val());}
+            //alert($(this).prop( "checked" ));
+            //alert($(this).val());
+            // $("#user input").attr("checked", false);
+            //});
+            });
+
+            });
+        */
         var selected=$('input:checked').val();
         var flag=$(this).prop( "checked" );
         if(flag){
