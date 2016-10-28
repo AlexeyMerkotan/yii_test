@@ -45,7 +45,7 @@ $(function() {
 
     //delete data calendar
     $(document).on('click','.btn-danger',function(){
-      var form=new FormData();
+        var form=new FormData();
         form.append('id',id);
         $.ajax({
             url:'index.php?r=modelview%2Fdelete',
@@ -121,37 +121,37 @@ $(function() {
             .load($(this).attr('data-target'));
 
         $.get('index.php?r=modelview%2Fdetermine',{'id':id},function(data){
-                var project=$.parseJSON(data);
-                $.each(project, function(key, value) {
-                    if(key=='id_user'){
-                        $('#calendar-id_user').val(value);
-                        Select_Project(value);
-                    }
-                    if(key=='id_project'){
-                        $('#calendar-id_project').val(value);
-                    }
-                    if(key=='start_at'){
-                        var queryDate = value,
-                            dateParts = queryDate.match(/(\d+)/g),
-                            realDate = new Date(dateParts[0], dateParts[1] - 1, dateParts[2]);
-                        $('#date-picker1-update').datepicker('setDate', (realDate) );
-                    }
-                    if(key=='end_at'){
-                        var queryDate = value,
-                            dateParts = queryDate.match(/(\d+)/g),
-                            realDate = new Date(dateParts[0], dateParts[1] - 1, dateParts[2]);
-                        $('#date-picker').datepicker('setDate', (realDate) );
-                    }
-                    if(key=='comment'){
-                        $('#calendar-comment').val(value);
-                    }
+            var project=$.parseJSON(data);
+            $.each(project, function(key, value) {
+                if(key=='id_user'){
+                    $('#calendar-id_user').val(value);
+                    Select_Project(value);
+                }
+                if(key=='id_project'){
+                    $('#calendar-id_project').val(value);
+                }
+                if(key=='start_at'){
+                    var queryDate = value,
+                        dateParts = queryDate.match(/(\d+)/g),
+                        realDate = new Date(dateParts[0], dateParts[1] - 1, dateParts[2]);
+                    $('#date-picker1-update').datepicker('setDate', (realDate) );
+                }
+                if(key=='end_at'){
+                    var queryDate = value,
+                        dateParts = queryDate.match(/(\d+)/g),
+                        realDate = new Date(dateParts[0], dateParts[1] - 1, dateParts[2]);
+                    $('#date-picker').datepicker('setDate', (realDate) );
+                }
+                if(key=='comment'){
+                    $('#calendar-comment').val(value);
+                }
 
-                })
+            })
 
 
         });
 
-     });
+    });
 
 
 
@@ -238,7 +238,7 @@ $(function() {
         form.append('end_at',$('#calendar-end_at').val());
         form.append('comment',$('#calendar-comment').val());
         $.ajax({
-            url:'index.php?r=modelview%2Fcreate',
+            url:'index.php?r=viewmodel%2Fcreate',
             type: "post",
             dataType:'text',
             cache:false,
@@ -356,7 +356,7 @@ $(function() {
 /*
 
 
-$.ajax({
+ $.ajax({
  url:'index.php?r=signup%2Fselect',
  dataType:'text',
  cache:false,
@@ -375,25 +375,25 @@ $.ajax({
  }
  });*/
 /*function (start, end) {
-        var title = prompt('Event Title:');
-        var eventData;
-        if (title) {
-            eventData = {
-                title: title,
-                start: start,
-                end: end
-            };
-            $('#w0').fullCalendar('renderEvent', eventData, true);
-        }
-        $('#w0').fullCalendar('unselect');
-    }
-function (calEvent, jsEvent, view) {
+ var title = prompt('Event Title:');
+ var eventData;
+ if (title) {
+ eventData = {
+ title: title,
+ start: start,
+ end: end
+ };
+ $('#w0').fullCalendar('renderEvent', eventData, true);
+ }
+ $('#w0').fullCalendar('unselect');
+ }
+ function (calEvent, jsEvent, view) {
 
-        alert('Event: ' + calEvent.title);
-        alert('Coordinates: ' + jsEvent.pageX + ',' + jsEvent.pageY);
-        alert('View: ' + view.name);
+ alert('Event: ' + calEvent.title);
+ alert('Coordinates: ' + jsEvent.pageX + ',' + jsEvent.pageY);
+ alert('View: ' + view.name);
 
-        // change the border color just for fun
-        $(this).css('border-color', 'red');
+ // change the border color just for fun
+ $(this).css('border-color', 'red');
 
-    }*/
+ }*/
