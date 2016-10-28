@@ -53,7 +53,7 @@ class ProjectController extends Controller
                 ]);
             }
             else{
-                return $this->redirect(['/signup']);
+                return $this->redirect(['/home']);
             }
 
 
@@ -73,7 +73,7 @@ class ProjectController extends Controller
             ]);
         }
         else{
-            return $this->redirect(['/signup']);
+            return $this->redirect(['/home']);
         }
 
     }
@@ -97,7 +97,7 @@ class ProjectController extends Controller
             }
         }
         else{
-            return $this->redirect(['/signup']);
+            return $this->redirect(['/home']);
         }
 
     }
@@ -122,7 +122,7 @@ class ProjectController extends Controller
             }
         }
         else{
-            return $this->redirect(['/signup']);
+            return $this->redirect(['/home']);
         }
 
     }
@@ -141,7 +141,7 @@ class ProjectController extends Controller
             return $this->redirect(['index']);
         }
         else{
-            return $this->redirect(['/signup']);
+            return $this->redirect(['/home']);
         }
 
     }

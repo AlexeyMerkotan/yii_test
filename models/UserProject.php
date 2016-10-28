@@ -47,6 +47,11 @@ class UserProject extends \yii\db\ActiveRecord
             'id_project' => Yii::t('app', 'Id Project'),
         ];
     }
+    public  function get_AddUser_Project($project,$id_user){
+        $this->id_user=$id_user;
+        $this->id_project=$project;
+        $this->save();
+    }
 
     /**
      * @return \yii\db\ActiveQuery

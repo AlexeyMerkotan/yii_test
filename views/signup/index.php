@@ -20,30 +20,4 @@ $this->title = Yii::t('app', 'Calendar');
     <?= $this->render('_form', ['model' => $model,]) ?>
 
 
-
-    <?php /*GridView::widget([
-        'dataProvider' => $dataProvider,
-        'filterModel' => $searchModel,
-        'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
-
-            'name',
-            'email:email',
-            'auth_key',
-            'password_hash',
-            // 'created_at',
-            // 'updated_at',
-            // 'status',
-            // 'color',
-            // 'bithday',
-            // 'phone',
-            // 'country_id',
-            // 'city',
-            // 'zip',
-            // 'address',
-            // 'avatar',
-
-            ['class' => 'yii\grid\ActionColumn'],
-        ],
-    ]);*/ ?>
 </div>

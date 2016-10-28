@@ -1,27 +1,44 @@
 var start_at;
 var id;
 
+function Select_Project(select) {
+    $.get('index.php?r=modelview%2Fselect',{'select':select},function(date){
+        var project=$.parseJSON(date);
+        $('#calendar-id_project').html('');
+        $.each(project, function(key, value) {
+            var option1 = $('#calendar-id_project').append($("<option >", {
+                "value": value.id,
+                text: value.name
+            }));
+        })
+    });
 
+}
+function clean() {
+    $('#modal').on('hidden.bs.modal', function () {
+        $(this).find("input,textarea,select").val('').end();
+    });
+}
 
 $(function() {
 
 
     //view model windows
     $(document).on('click','.fc-day',function () {
+
+        clean();
+        $( ".btn-success" ).prop( "disabled", false );
+        $( ".btn-danger" ).prop( "disabled", true );
+        $( ".btn-primary" ).prop( "disabled", true );
         start_at=$(this).attr('data-date');
         $('#modal').modal('show')
             .find('#modal-content')
             .load($(this).attr('data-target'));
-        $.get('index.php?r=signup%2Fselectview',function(date){
-            var project=$.parseJSON(date);
-            $('#calendar-id_project').html('');
-            $.each(project, function(key, value) {
-                var option1 = $('#calendar-id_user').append($("<option >", {
-                    "value": value.id,
-                    text: value.name
-                }));
-            })
-        });
+        var queryDate = start_at,
+            dateParts = queryDate.match(/(\d+)/g),
+            realDate = new Date(dateParts[0], dateParts[1] - 1, dateParts[2]);
+        $('#date-picker1-update').datepicker('setDate', (realDate) );
+
 
 
     });
@@ -31,7 +48,7 @@ $(function() {
       var form=new FormData();
         form.append('id',id);
         $.ajax({
-            url:'index.php?r=signup%2Fdelete',
+            url:'index.php?r=modelview%2Fdelete',
             type: "post",
             dataType:'text',
             cache:false,
@@ -53,13 +70,15 @@ $(function() {
     //data update
     $(document).on('click','.btn-primary',function () {
         var form=new FormData();
-        form.append('start_at',$(calendar-start_at).val());
+        form.append('id',id);
+        form.append('start_at',$('#calendar-start_at').val());
         form.append('id_user',$('#calendar-id_user').val());
         form.append('id_project',$('#calendar-id_project').val());
         form.append('end_at',$('#calendar-end_at').val());
         form.append('comment',$('#calendar-comment').val());
+        $('#calendar').fullCalendar('removeEvents', id);
         $.ajax({
-            url:'index.php?r=signup%2Fupdate',
+            url:'index.php?r=modelview%2Fupdate',
             type: "post",
             dataType:'text',
             cache:false,
@@ -69,7 +88,10 @@ $(function() {
             success:function (date) {
                 var project=$.parseJSON(date);
                 $.each(project, function(key, value) {
+
+
                     var eventData = {
+                        id: value.id,
                         title: "Project("+value.project+")",
                         start: value.start_at,
                         end: value.end_at,
@@ -80,6 +102,7 @@ $(function() {
 
                 })
 
+
             }
         });
 
@@ -88,18 +111,40 @@ $(function() {
 
     //view data update
     $(document).on('click','.fc-content',function () {
+        clean();
+        $( ".btn-success" ).prop( "disabled", true );
+        $( ".btn-danger" ).prop( "disabled", false );
+        $( ".btn-primary" ).prop( "disabled", false );
 
-        $('#modal1').modal('show')
+        $('#modal').modal('show')
             .find('#modal-content')
             .load($(this).attr('data-target'));
-        $.get('index.php?r=signup%2Fdetermine',{'id':id},function(data){
+
+        $.get('index.php?r=modelview%2Fdetermine',{'id':id},function(data){
                 var project=$.parseJSON(data);
                 $.each(project, function(key, value) {
-
-                    $('#hidden').val(this.getAttribute('param'));
-                    $('input[name="Calendar[]"]').val(value.comment);
-
-
+                    if(key=='id_user'){
+                        $('#calendar-id_user').val(value);
+                        Select_Project(value);
+                    }
+                    if(key=='id_project'){
+                        $('#calendar-id_project').val(value);
+                    }
+                    if(key=='start_at'){
+                        var queryDate = value,
+                            dateParts = queryDate.match(/(\d+)/g),
+                            realDate = new Date(dateParts[0], dateParts[1] - 1, dateParts[2]);
+                        $('#date-picker1-update').datepicker('setDate', (realDate) );
+                    }
+                    if(key=='end_at'){
+                        var queryDate = value,
+                            dateParts = queryDate.match(/(\d+)/g),
+                            realDate = new Date(dateParts[0], dateParts[1] - 1, dateParts[2]);
+                        $('#date-picker').datepicker('setDate', (realDate) );
+                    }
+                    if(key=='comment'){
+                        $('#calendar-comment').val(value);
+                    }
 
                 })
 
@@ -113,17 +158,10 @@ $(function() {
 
 
     $(document).on('change','.user',function () {
-        var selected=$('input:checked').val();
-        var flag=$(this).prop( "checked" );
-        if(flag){
-            $.get('index.php?r=signup%2Fchechuser',{'id':selected},function(data){
-                var project=$.parseJSON(data);
-                $.each(project, function(key, value) {
-                    $('#calendar').fullCalendar('removeEvents', value.id);
-                })
-            });
-        }else{
-            $.get('index.php?r=signup%2Fchechviewuser',{'id':selected},function(data){
+
+        if($(this).is(":checked")){
+            var selected=$(this).val();
+            $.get('index.php?r=view%2Fchechviewuser',{'id':selected},function(data){
                 var project=$.parseJSON(data);
                 $.each(project, function(key, value) {
                     var eventData = {
@@ -136,25 +174,55 @@ $(function() {
                     $('#calendar').fullCalendar('renderEvent', eventData, true);
                 })
             });
+        } else {
+            var selected=$(this).val();
+            $.get('index.php?r=view%2Fchechuser',{'id':selected},function(data){
+                var project=$.parseJSON(data);
+                $.each(project, function(key, value) {
+                    $('#calendar').fullCalendar('removeEvents', value.id);
+                })
+            });
         }
 
 
 
+
     });
+
 
 
     $(document).on('change','.project',function () {
-        var selected=$('input:checked').val();
-        $.get('index.php?r=signup%2Fchechproject',{'id':selected},function(data){
-            var project=$.parseJSON(data);
-            $.each(project, function(key, value) {
-                $('#calendar').fullCalendar('removeEvents', value.id);
-            })
+
+        if($(this).is(":checked")){
+            var selected=$(this).val();
+            $.get('index.php?r=view%2Fchechviewproject',{'id':selected},function(data){
+                var project=$.parseJSON(data);
+                $.each(project, function(key, value) {
+                    var eventData = {
+                        id:value.id,
+                        title: "Project("+value.project+")",
+                        start: value.start_at,
+                        end: value.end_at,
+                        color:value.color,
+                    };
+                    $('#calendar').fullCalendar('renderEvent', eventData, true);
+                })
+            });
+        } else {
+            var selected=$(this).val();
+            $.get('index.php?r=view%2Fchechproject',{'id':selected},function(data){
+                var project=$.parseJSON(data);
+                $.each(project, function(key, value) {
+                    $('#calendar').fullCalendar('removeEvents', value.id);
+                })
+            });
+        }
 
 
-        });
+
 
     });
+
 
 
 
@@ -164,13 +232,13 @@ $(function() {
     //add data calendar
     $(document).on('click','.btn-success',function () {
         var form=new FormData();
-        form.append('start_at',start_at);
+        form.append('start_at',$('#calendar-start_at').val());
         form.append('id_user',$('#calendar-id_user').val());
         form.append('id_project',$('#calendar-id_project').val());
         form.append('end_at',$('#calendar-end_at').val());
         form.append('comment',$('#calendar-comment').val());
         $.ajax({
-            url:'index.php?r=signup%2Fcreate',
+            url:'index.php?r=modelview%2Fcreate',
             type: "post",
             dataType:'text',
             cache:false,
@@ -182,8 +250,8 @@ $(function() {
                 $.each(project, function(key, value) {
 
 
-
                     var eventData = {
+                        id: value.id,
                         title: "Project("+value.project+")",
                         start: value.start_at,
                         end: value.end_at,
@@ -204,16 +272,8 @@ $(function() {
     //view project to user
     $(document).on('change','#calendar-id_user',function () {
         var select=$('#calendar-id_user :selected').val();
-        $.get('index.php?r=signup%2Fselect',{'select':select},function(date){
-            var project=$.parseJSON(date);
-            $('#calendar-id_project').html('');
-            $.each(project, function(key, value) {
-                var option1 = $('#calendar-id_project').append($("<option >", {
-                    "value": value.id,
-                    text: value.name
-                }));
-            })
-        });
+        Select_Project(select);
+
 
     });
 

@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use app\models\UserProject;
 use Yii;
 use app\models\User;
 use app\models\UserSearch;
@@ -44,7 +45,7 @@ class UserController extends Controller
                 'dataProvider' => $dataProvider,
             ]);
         }else
-            return $this->redirect(['/signup']);
+            return $this->redirect(['/home']);
     }
 
     /**
@@ -59,7 +60,7 @@ class UserController extends Controller
                 'model' => $this->findModel($id),
             ]);
         }else
-            return $this->redirect(['/signup']);
+            return $this->redirect(['/home']);
 
     }
 
@@ -81,7 +82,7 @@ class UserController extends Controller
                 ]);
             }
         }else
-            return $this->redirect(['/signup']);
+            return $this->redirect(['/home']);
 
     }
 
@@ -104,7 +105,7 @@ class UserController extends Controller
                 ]);
             }
         }else
-            return $this->redirect(['/signup']);
+            return $this->redirect(['/home']);
 
     }
 
@@ -121,7 +122,7 @@ class UserController extends Controller
 
             return $this->redirect(['index']);
         }else
-            return $this->redirect(['/signup']);
+            return $this->redirect(['/home']);
 
     }
 
@@ -140,4 +141,17 @@ class UserController extends Controller
             throw new NotFoundHttpException('The requested page does not exist.');
         }
     }
+
+    public function actionAddproject($id,$id_user){
+        $model=new UserProject();
+        $model->get_AddUser_Project($id,$id_user);
+    }
+
+    public function actionRemoveproject($id,$id_user){
+        UserProject::find()->where(['id_user'=>$id_user,'id_project'=>$id])->one()->delete();
+    }
+
+
+
+
 }
