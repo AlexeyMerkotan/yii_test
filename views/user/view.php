@@ -3,6 +3,7 @@
 use yii\helpers\Html;
 use yii\widgets\DetailView;
 
+
 /* @var $this yii\web\View */
 /* @var $model app\models\User */
 
@@ -31,20 +32,26 @@ $this->params['breadcrumbs'][] = $this->title;
             'id',
             'name',
             'email:email',
-            'auth_key',
-            'password_hash',
             'created_at',
             'updated_at',
-            'status',
+            array(
+                'attribute'=>'status',
+                'label'=>'Status',
+                'value' => $model->functionStatus($model->status),
+            ),
             'color',
-            'bithday',
+            [
+                'attribute'=>'bithday',
+                'value'=>date('Y-m-d',$model->bithday),
+
+            ],
             'phone',
             'country_id',
             'city',
-            'zip',
             'address',
             'avatar',
         ],
+
     ]) ?>
 
 </div>

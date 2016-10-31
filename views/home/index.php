@@ -32,8 +32,6 @@ $datePickerRange = (date('Y') - 100) . ':' . date('Y');
     ?>
     <?php $form = ActiveForm::begin(); ?>
 
-    <?php $authors = User::find()->all();
-    $items = ArrayHelper::map($authors,'id','name');?>
 
     <?= $form->field($calendar, 'id_user')->dropDownList($items,[
         'prompt' => 'Select...'
@@ -44,7 +42,7 @@ $datePickerRange = (date('Y') - 100) . ':' . date('Y');
     ]);?>
 
 
-    <?= $form->field($calendar, 'start_at', ['options' => ['class' => 'hidden1']])->textInput(['value' => !empty($calendar->start_at) ? date('Y-m-d', $calendar->start_at) : null]) ?>
+    <?= $form->field($calendar, 'start_at', ['options' => ['class' => 'hidden']])->textInput(['value' => !empty($calendar->start_at) ? date('Y-m-d', $calendar->start_at) : null]) ?>
 
     <?= $form->field($calendar, 'start_at')->widget(DatePicker::classname(), [
         'clientOptions' => ['changeMonth' => true, 'changeYear' => true, 'yearRange' => $datePickerRange, 'altFormat' => 'yy-mm-dd', 'altField' => '#calendar-start_at'],
@@ -52,7 +50,7 @@ $datePickerRange = (date('Y') - 100) . ':' . date('Y');
     ]) ?>
 
 
-    <?= $form->field($calendar, 'end_at', ['options' => ['class' => 'hidden1']])->textInput(['value' => !empty($calendar->end_at) ? date('Y-m-d', $calendar->end_at) : null]) ?>
+    <?= $form->field($calendar, 'end_at', ['options' => ['class' => 'hidden']])->textInput(['value' => !empty($calendar->end_at) ? date('Y-m-d', $calendar->end_at) : null]) ?>
 
     <?= $form->field($calendar, 'end_at')->widget(DatePicker::classname(), [
         'clientOptions' => ['changeMonth' => true, 'changeYear' => true, 'yearRange' => $datePickerRange, 'altFormat' => 'yy-mm-dd', 'altField' => '#calendar-end_at'],
@@ -90,25 +88,29 @@ $datePickerRange = (date('Y') - 100) . ':' . date('Y');
                                 //alert(\'Event: \' + event.id);
                                 id=event.id;          
                 }'),
+
+
                 ],
             ));?>
         </div>
-        <div class="col-md-2 col-sm-2 col-xs-2">    <div class="row">
-                <div class="col-md-12 col-sm-12 col-xs-12">
+        <div id="draggable" class="col-md-2 col-sm-2 col-xs-2">    <div class="row">
+                <div  class="col-md-12 col-sm-12 col-xs-12" style="border: 1px solid ">
+                    <h3>User</h3>
                     <?php
-                    foreach ($model as $value):?>
-                        <div class="checkbox" style="background:<?=$value->color?>;">
+                    foreach ($model as $value):/* под новый фильтер */?>
+                        <div class="checkbox user" style="background:<?=$value->color?>;">
                             <label>
-                                <input  class="user" type="checkbox"  value="<?=$value->id?>" checked> <?=$value->name;?>
+                                <input type="checkbox"  value="<?=$value->id?>"> <?=$value->name;?>
                             </label>
                         </div>
                     <?php endforeach; ?>
                 </div>
-                <div class="col-md-12 col-sm-12 col-xs-12"><?php
-                    foreach ($project as $value):?>
-                        <div class="checkbox">
+                <div class="col-md-12 col-sm-12 col-xs-12" style="border: 1px solid ">
+                    <h3>Project</h3>
+                    <?php foreach ($project as $value):?>
+                        <div class="checkbox project">
                             <label>
-                                <input  class="project" type="checkbox"   value="<?=$value->id?>"> <?=$value->name;?>
+                                <input class="proj" type="checkbox"   value="<?=$value->id?>"> <?=$value->name;?>
                             </label>
                         </div>
                     <?php endforeach; ?></div>

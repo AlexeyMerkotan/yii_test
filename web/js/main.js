@@ -1,6 +1,6 @@
 var start_at;
 var id;
-
+var user;
 function Select_Project(select) {
     $.get('index.php?r=modelview%2Fselect',{'select':select},function(date){
         var project=$.parseJSON(date);
@@ -20,16 +20,18 @@ function clean() {
     });
 }
 
+
 $(function() {
 
 
+    $( "#draggable" ).draggable();
     //view model windows
     $(document).on('click','.fc-day',function () {
 
         clean();
-        $( ".btn-success" ).prop( "disabled", false );
-        $( ".btn-danger" ).prop( "disabled", true );
-        $( ".btn-primary" ).prop( "disabled", true );
+        $('.btn-success').show();
+        $('.btn-primary').hide();
+        $('.btn-danger').hide();
         start_at=$(this).attr('data-date');
         $('#modal').modal('show')
             .find('#modal-content')
@@ -112,9 +114,9 @@ $(function() {
     //view data update
     $(document).on('click','.fc-content',function () {
         clean();
-        $( ".btn-success" ).prop( "disabled", true );
-        $( ".btn-danger" ).prop( "disabled", false );
-        $( ".btn-primary" ).prop( "disabled", false );
+        $('.btn-success').hide();
+        $('.btn-primary').show();
+        $('.btn-danger').show();
 
         $('#modal').modal('show')
             .find('#modal-content')
@@ -157,7 +159,7 @@ $(function() {
 
 
 
-    $(document).on('change','.user',function () {
+    /*$(document).on('change','.user',function () {
 
         if($(this).is(":checked")){
             var selected=$(this).val();
@@ -171,6 +173,7 @@ $(function() {
                         end: value.end_at,
                         color:value.color,
                     };
+                    $('#calendar').fullCalendar('removeEvents', value.id);
                     $('#calendar').fullCalendar('renderEvent', eventData, true);
                 })
             });
@@ -205,6 +208,7 @@ $(function() {
                         end: value.end_at,
                         color:value.color,
                     };
+                    $('#calendar').fullCalendar('removeEvents', value.id);
                     $('#calendar').fullCalendar('renderEvent', eventData, true);
                 })
             });
@@ -216,6 +220,73 @@ $(function() {
                     $('#calendar').fullCalendar('removeEvents', value.id);
                 })
             });
+
+        }
+
+
+
+
+    });*/
+
+
+    $(document).on('change','.proj',function () {
+
+        if($(this).is(":checked")){
+            //var selected=$(this).val();
+            var selected = [];
+            $('.project input:checkbox:checked').each(function(){
+                var checkbox_value = $(this).val();
+                selected.push(checkbox_value);
+            });
+
+            var select = [];
+            $('.user input:checkbox:checked').each(function(){
+                var checkbox_value = $(this).val();
+                select.push(checkbox_value);
+            });
+            console.log(select);
+            var form=new FormData();
+            form.append('id',selected);
+            form.append('select',select);
+            $.ajax({
+                url:'index.php?r=view%2Fchechviewproject',
+                type: "post",
+                dataType:'text',
+                cache:false,
+                contentType:false,
+                processData:false,
+                data: form,
+                success:function (date) {
+                    var project=$.parseJSON(data);
+                    $.each(project, function(key, value) {
+                        var eventData = {
+                            id:value.id,
+                            title: "Project("+value.project+")",
+                            start: value.start_at,
+                            end: value.end_at,
+                            color:value.color,
+                        };
+                        $('#calendar').fullCalendar('removeEvents', value.id);
+                        $('#calendar').fullCalendar('renderEvent', eventData, true);
+                    })
+                }
+            });
+
+
+           /* $.get('index.php?r=view%2Fchechviewproject',{'select':select},function(data){
+                var project=$.parseJSON(data);
+                $.each(project, function(key, value) {
+                    var eventData = {
+                        id:value.id,
+                        title: "Project("+value.project+")",
+                        start: value.start_at,
+                        end: value.end_at,
+                        color:value.color,
+                    };
+                    $('#calendar').fullCalendar('removeEvents', value.id);
+                    $('#calendar').fullCalendar('renderEvent', eventData, true);
+                })
+            });*/
         }
 
 
@@ -238,7 +309,7 @@ $(function() {
         form.append('end_at',$('#calendar-end_at').val());
         form.append('comment',$('#calendar-comment').val());
         $.ajax({
-            url:'index.php?r=viewmodel%2Fcreate',
+            url:'index.php?r=modelview%2Fcreate',
             type: "post",
             dataType:'text',
             cache:false,
@@ -277,6 +348,20 @@ $(function() {
 
     });
 
+        //user to project
+        $(document).on('change','.projection',function () {
+            if($(this).is(":checked")){
+                var selected=$(this).val();
+                $.get('index.php?r=user%2Faddproject',{'id':selected,'id_user':user},function(data){
+                   alert('Add project user');
+                });
+            } else {
+                var selected=$(this).val();
+                $.get('index.php?r=user%2Fremoveproject',{'id':selected,'id_user':user},function(data){
+                    alert('Remove project user');
+                });
+            }
+        });
 });
 
 

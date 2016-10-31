@@ -33,7 +33,7 @@ $datePickerRange = (date('Y') - 100) . ':' . date('Y');
     <?php //$form->field($model, 'color')->textInput(['maxlength' => true]) ?>
 
 
-    <?= $form->field($model, 'bithday', ['options' => ['class' => 'hidden2']])->textInput(['value' => !empty($model->bithday) ? date('Y-m-d', $model->bithday) : null]) ?>
+    <?= $form->field($model, 'bithday', ['options' => ['class' => 'hidden']])->textInput(['value' => !empty($model->bithday) ? date('Y-m-d', $model->bithday) : null]) ?>
 
     <?= $form->field($model, 'bithday')->widget(DatePicker::classname(), [
         'clientOptions' => ['changeMonth' => true, 'changeYear' => true, 'yearRange' => $datePickerRange, 'altFormat' => 'yy-mm-dd', 'altField' => '#user-bithday'],
@@ -44,7 +44,14 @@ $datePickerRange = (date('Y') - 100) . ':' . date('Y');
 
     <?= $form->field($model, 'phone')->textInput() ?>
 
-    <?= $form->field($model, 'country')->textInput() ?>
+    <?php
+    $country = \app\models\Country::find()->all();
+    $items = \yii\helpers\ArrayHelper::map($country,'id','name');
+    ?>
+
+    <?= $form->field($model, 'country_id')->dropDownList($items,[
+        'prompt' => 'Select...'
+    ]);?>
 
 
     <?= $form->field($model, 'city')->textInput(['maxlength' => true]) ?>

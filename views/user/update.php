@@ -28,7 +28,7 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Update');
 
         </div>
     <?php $project = \app\models\Project::find()->all(); ?>
-        <div class="col-md-2 col-sm-2 col-xs-2">
+        <div class="col-md-2 col-sm-2 col-xs-2" style="border: 1px solid">
                 <h3>Project</h3>
                 <div class="col-md-12 col-sm-12 col-xs-12">
                     <?php foreach ($project as $value):?>
@@ -39,13 +39,13 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Update');
                         <?php if($customer):?>
                         <div class="checkbox" >
                             <label>
-                                <input class="projection" type="checkbox" onclick="Id_user(<?=$_GET['id']?>)" value="<?=$value->id?>" checked> <?=$value->name;?>
+                                <input class="projection" type="checkbox" onclick="user=<?=$_GET['id']?>" value="<?=$value->id?>" checked> <?=$value->name;?>
                             </label>
                         </div>
                             <?php else :?>
                             <div class="checkbox" >
                                 <label>
-                                    <input class="projection" type="checkbox"  onclick="Id_user(<?=$_GET['id']?>)" value="<?=$value->id?>"> <?=$value->name;?>
+                                    <input class="projection" type="checkbox"  onclick="user=<?=$_GET['id']?>"  value="<?=$value->id?>"> <?=$value->name;?>
                                 </label>
                             </div>
                             <?php endif;?>
@@ -54,17 +54,3 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Update');
     </div>
 
 </div>
-<script>function Id_user(id_user){
-        if($(this).is(":checked")){
-            var selected=$(this).val();
-            $.get('index.php?r=user%2Faddproject',{'id':selected},function(data){
-                alert("Project add to user " + selected);
-            });
-        } else {
-            var selected=$(this).val();
-            $.get('index.php?r=user%2Fremoveproject',{'id':selected},function(data){
-                alert("Project remove to user " + selected);
-            });
-        }
-    alert(id_user);
-    }</script>

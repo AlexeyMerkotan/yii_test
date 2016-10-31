@@ -60,8 +60,11 @@ class SignupController extends Controller
 
                 if($model->save())
                     return $this->redirect(['/login/index']);
+                else
+                    print_r($model->errors);
 
             } else {
+
                 return $this->render('index', [
                     'model' => $model,
                 ]);

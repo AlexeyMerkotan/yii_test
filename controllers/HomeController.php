@@ -7,6 +7,7 @@ use app\models\Project;
 use Yii;
 use app\models\User;
 use app\models\Calendar;
+use \yii\helpers\ArrayHelper;
 
 
 class HomeController extends \yii\web\Controller
@@ -35,10 +36,13 @@ class HomeController extends \yii\web\Controller
             }
             $model=User::find()->all();
             $project=Project::find()->all();
+            $authors = User::find()->all();
+            $items = ArrayHelper::map($authors,'id','name');
             return $this->render('index',['events'=>$events,
                 'calendar' => $calendar,
                 'model' => $model,
                 'project' => $project,
+                'items'  => $items,
 
 
             ]);

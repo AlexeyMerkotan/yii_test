@@ -17,11 +17,13 @@ $datePickerRange = (date('Y') - 100) . ':' . date('Y');
     <h1><?= Html::encode($this->title) ?></h1>
 
     <?php $form = ActiveForm::begin(); ?>
+
     <?= $form->field($model, 'color')->widget(ColorInput::classname(), [
         'options' => ['placeholder' => 'Select color ...'],
     ]);
     ?>
 
+    <?= Html::img($model->avatar, ['alt' => $model->avatar]) ?>
 
     <?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
 
@@ -40,7 +42,7 @@ $datePickerRange = (date('Y') - 100) . ':' . date('Y');
     <?php //$form->field($model, 'color')->textInput(['maxlength' => true]) ?>
 
 
-    <?= $form->field($model, 'bithday', ['options' => ['class' => 'hidden1']])->textInput(['value' => !empty($model->bithday) ? date('Y-m-d', $model->bithday) : null]) ?>
+    <?= $form->field($model, 'bithday', ['options' => ['class' => 'hidden']])->textInput(['value' => !empty($model->bithday) ? date('Y-m-d', $model->bithday) : null]) ?>
 
     <?= $form->field($model, 'bithday')->widget(DatePicker::classname(), [
         'clientOptions' => ['changeMonth' => true, 'changeYear' => true, 'yearRange' => $datePickerRange, 'altFormat' => 'yy-mm-dd', 'altField' => '#user-bithday'],

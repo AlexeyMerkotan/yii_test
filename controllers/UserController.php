@@ -9,6 +9,7 @@ use app\models\UserSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\web\UploadedFile;
 
 /**
  * UserController implements the CRUD actions for User model.
@@ -74,8 +75,29 @@ class UserController extends Controller
         if(!Yii::$app->user->isGuest) {
             $model = new User();
 
-            if ($model->load(Yii::$app->request->post()) && $model->save()) {
-                return $this->redirect(['view', 'id' => $model->id]);
+
+            if ($model->load(Yii::$app->request->post()) ) {
+
+                $model->setPassword($model->password);
+
+                $model->generateAuthKey();
+
+                $model->status();
+
+                if(UploadedFile::getInstance($model, 'avatar'))
+                {
+                    $avatar = UploadedFile::getInstance($model, 'avatar');
+
+                    $type=substr($avatar->type,6);
+
+                    $today = new \DateTime('now');
+
+                    $avatar->saveAs('avatar/' . $today->date . '.' . $type);
+
+                    $model->avatar='avatar/' . $today->date . '.' . $type;
+                }
+                if($model->save())
+                    return $this->redirect(['view', 'id' => $model->id]);
             } else {
                 return $this->render('create', [
                     'model' => $model,
@@ -97,8 +119,21 @@ class UserController extends Controller
         if(!Yii::$app->user->isGuest) {
             $model = $this->findModel($id);
 
-            if ($model->load(Yii::$app->request->post()) && $model->save()) {
-                return $this->redirect(['view', 'id' => $model->id]);
+            if ($model->load(Yii::$app->request->post()) ) {
+                if(UploadedFile::getInstance($model, 'avatar'))
+                {
+                    $avatar = UploadedFile::getInstance($model, 'avatar');
+
+                    $type=substr($avatar->type,6);
+
+                    $today = new \DateTime('now');
+
+                    $avatar->saveAs('avatar/' . $today->date . '.' . $type);
+
+                    $model->avatar='avatar/' . $today->date . '.' . $type;
+                }
+                if($model->save())
+                    return $this->redirect(['view', 'id' => $model->id]);
             } else {
                 return $this->render('update', [
                     'model' => $model,
@@ -115,6 +150,7 @@ class UserController extends Controller
      * @param integer $id
      * @return mixed
      */
+
     public function actionDelete($id)
     {
         if(!Yii::$app->user->isGuest) {
@@ -143,12 +179,16 @@ class UserController extends Controller
     }
 
     public function actionAddproject($id,$id_user){
-        $model=new UserProject();
-        $model->get_AddUser_Project($id,$id_user);
+        if((integer)$id && (integer)$id_user){
+                $model = new UserProject();
+                $model->get_AddUser_Project($id, $id_user);
+        }
     }
 
     public function actionRemoveproject($id,$id_user){
-        UserProject::find()->where(['id_user'=>$id_user,'id_project'=>$id])->one()->delete();
+        if((integer)$id && (integer)$id_user){
+            UserProject::find()->where(['id_user' => $id_user, 'id_project' => $id])->one()->delete();
+        }
     }
 
 

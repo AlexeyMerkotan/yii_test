@@ -21,7 +21,7 @@ $datePickerRange = (date('Y') - 100) . ':' . date('Y');
     <?= $form->field($model, 'description')->textarea(['rows' => 6]) ?>
 
 
-    <?= $form->field($model, 'start_at', ['options' => ['class' => 'hidden1']])->textInput(['value' => !empty($model->start_at) ? date('Y-m-d', $model->start_at) : null]) ?>
+    <?= $form->field($model, 'start_at', ['options' => ['class' => 'hidden']])->textInput(['value' => !empty($model->start_at) ? date('Y-m-d', $model->start_at) : null]) ?>
 
     <?= $form->field($model, 'start_at')->widget(DatePicker::classname(), [
         'clientOptions' => ['changeMonth' => true, 'changeYear' => true, 'yearRange' => $datePickerRange, 'altFormat' => 'yy-mm-dd', 'altField' => '#project-start_at'],
@@ -32,7 +32,7 @@ $datePickerRange = (date('Y') - 100) . ':' . date('Y');
 
 
 
-    <?= $form->field($model, 'end_at', ['options' => ['class' => 'hidden1']])->textInput(['value' => !empty($model->end_at) ? date('Y-m-d', $model->end_at) : null]) ?>
+    <?= $form->field($model, 'end_at', ['options' => ['class' => 'hidden']])->textInput(['value' => !empty($model->end_at) ? date('Y-m-d', $model->end_at) : null]) ?>
 
     <?= $form->field($model, 'end_at')->widget(DatePicker::classname(), [
         'clientOptions' => ['changeMonth' => true, 'changeYear' => true, 'yearRange' => $datePickerRange, 'altFormat' => 'yy-mm-dd', 'altField' => '#project-end_at'],

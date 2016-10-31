@@ -69,24 +69,6 @@ class Calendar extends \yii\db\ActiveRecord
             'comment' => Yii::t('app', 'Comment'),
         ];
     }
-    public function get_UpdateCalendar(){
-        $calendar=Calendar::findOne($_POST['id']);
-        $this->id_user=$_POST['id_user'];
-        $this->id_project=$_POST['id_project'];
-        $this->start_at=$_POST['start_at'];
-        $this->end_at=$_POST['end_at'];
-        $this->comment=$_POST['comment'];
-        $this->save();
-    }
-
-    public function get_AddCalendar(){
-        $this->id_user=$_POST['id_user'];
-        $this->id_project=$_POST['id_project'];
-        $this->start_at=$_POST['start_at'];
-        $this->end_at=$_POST['end_at'];
-        $this->comment=$_POST['comment'];
-        $this->save();
-    }
 
     /**
      * @return \yii\db\ActiveQuery

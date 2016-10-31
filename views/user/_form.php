@@ -15,18 +15,19 @@ $datePickerRange = (date('Y') - 100) . ':' . date('Y');
 
     <?php $form = ActiveForm::begin(); ?>
 
+
+    <?= Html::img($model->avatar, ['alt' => $model->avatar]) ?>
+
     <?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
 
     <?= $form->field($model, 'email')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'created_at')->textInput() ?>
-
-    <?= $form->field($model, 'updated_at')->textInput() ?>
+    <?= $form->field($model, 'password')->passwordInput(['maxlength' => true]) ?>
 
     <?= $form->field($model, 'status')->dropDownList([
         '0' => 'enabled',
         '1' => 'pending',
-        '2'=>'blocked'
+        '2' => 'blocked'
     ]);?>
 
 
@@ -35,7 +36,7 @@ $datePickerRange = (date('Y') - 100) . ':' . date('Y');
     ]);
     ?>
 
-    <?= $form->field($model, 'bithday', ['options' => ['class' => 'hidden1']])->textInput(['value' => !empty($model->bithday) ? date('Y-m-d', $model->bithday) : null]) ?>
+    <?= $form->field($model, 'bithday', ['options' => ['class' => 'hidden']])->textInput(['value' => !empty($model->bithday) ? date('Y-m-d', $model->bithday) : null]) ?>
 
     <?= $form->field($model, 'bithday')->widget(DatePicker::classname(), [
         'clientOptions' => ['changeMonth' => true, 'changeYear' => true, 'yearRange' => $datePickerRange, 'altFormat' => 'yy-mm-dd', 'altField' => '#user-bithday'],
@@ -43,8 +44,13 @@ $datePickerRange = (date('Y') - 100) . ':' . date('Y');
     ]) ?>
 
     <?= $form->field($model, 'phone')->textInput(['maxlength' => true]) ?>
-
-    <?= $form->field($model, 'country_id')->textInput() ?>
+    <?php
+    $country = \app\models\Country::find()->all();
+    $items = \yii\helpers\ArrayHelper::map($country,'id','name');
+    ?>
+    <?= $form->field($model, 'country_id')->dropDownList($items,[
+        'prompt' => 'Select...'
+    ]);?>
 
     <?= $form->field($model, 'city')->textInput(['maxlength' => true]) ?>
 
@@ -52,7 +58,7 @@ $datePickerRange = (date('Y') - 100) . ':' . date('Y');
 
     <?= $form->field($model, 'address')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'avatar')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'avatar')->fileInput()  ?>
 
     <div class="form-group">
         <?= Html::submitButton($model->isNewRecord ? Yii::t('app', 'Create') : Yii::t('app', 'Update'), ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>

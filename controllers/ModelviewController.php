@@ -23,20 +23,21 @@ class ModelviewController extends \yii\web\Controller
     //select project
     public function actionSelect($select){
 
-
-        $query=UserProject::find()->all();
-        $arr=[];
-        foreach ($query as $item) {
-            if($item->id_user==$select){
-                $project=Project::findOne($item->id_project);
-                $array = [
-                    'id'=>$project->id,
-                    'name'=>$project->name,
-                ];
-                $arr[]=$array;
+        if((integer)$select){
+            $query=UserProject::find()->all();
+            $arr=[];
+            foreach ($query as $item) {
+                if($item->id_user==$select){
+                    $project=Project::findOne($item->id_project);
+                    $array = [
+                        'id'=>$project->id,
+                        'name'=>$project->name,
+                    ];
+                    $arr[]=$array;
+                }
             }
+            echo Json::encode($arr);
         }
-        echo Json::encode($arr);
     }
 
     //save data calendar
@@ -44,7 +45,8 @@ class ModelviewController extends \yii\web\Controller
 
 
         $calendar = new Calendar();
-        $calendar->get_AddCalendar();
+        $calendar->load(\Yii::$app->request->post(),'');
+        $calendar->save();
         $project = Project::findOne($calendar->id_project);
         $user=User::findOne($calendar->id_user);
         $array = [
@@ -77,8 +79,9 @@ class ModelviewController extends \yii\web\Controller
     //save update calendaar
     public function actionUpdate(){
 
-        $calendar=new Calendar();
-        $calendar->get_UpdateCalendar();
+        $calendar=Calendar::findOne(\Yii::$app->request->post('id'));
+        $calendar->load(\Yii::$app->request->post(),'');
+        $calendar->save();
         $user=User::findOne($calendar->id_user);
         $array=['id'=> $calendar->id,
             'id_user'=> $calendar->id_user,
@@ -94,17 +97,18 @@ class ModelviewController extends \yii\web\Controller
 
     //view update calendar
     public function actionDetermine($id){
-        $model = Calendar::findOne($id);
-        $array = [
-            'id'=>$model->id,
-            'id_user'=>$model->id_user,
-            'id_project'=>$model->id_project,
-            'start_at'=>date('Y-m-d\TH:i:s\Z',$model->start_at),
-            'end_at'=>date('Y-m-d\TH:i:s\Z',$model->end_at),
-            'comment'=>$model->comment,
-        ];
-        echo Json::encode($array);
-
+        if((integer)$id){
+            $model = Calendar::findOne($id);
+            $array = [
+                'id'=>$model->id,
+                'id_user'=>$model->id_user,
+                'id_project'=>$model->id_project,
+                'start_at'=>date('Y-m-d\TH:i:s\Z',$model->start_at),
+                'end_at'=>date('Y-m-d\TH:i:s\Z',$model->end_at),
+                'comment'=>$model->comment,
+            ];
+            echo Json::encode($array);
+        }
     }
 
 
@@ -112,8 +116,7 @@ class ModelviewController extends \yii\web\Controller
     //delete date calendar
     public function actionDelete()
     {
-       $var=\Yii::$app->request->post('id');
-        Calendar::findOne($_POST['id'])->delete();
+        Calendar::findOne(\Yii::$app->request->post('id'))->delete();
 
     }
 

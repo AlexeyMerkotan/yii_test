@@ -27,8 +27,20 @@ $this->params['breadcrumbs'][] = $this->title;
             'id',
             'name',
             'description:ntext',
-            'start_at',
-            'end_at',
+            [
+                'attribute'=>'start_at',
+                'label'=>'Start_at',
+                'value' => function ($data) {
+                    return date('Y-m-d',$data->start_at);
+                },
+            ],
+            [
+                'attribute'=>'end_at',
+                'label'=>'End_at',
+                'value' => function ($data) {
+                    return date('Y-m-d',$data->end_at);
+                },
+            ],
 
             ['class' => 'yii\grid\ActionColumn'],
         ],

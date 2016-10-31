@@ -22,25 +22,27 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
+
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
             'id',
             'name',
             'email:email',
-            //'auth_key',
-            //'password_hash',
              'created_at',
              'updated_at',
-             'status',
-            // 'color',
-            // 'bithday',
-            // 'phone',
-            // 'country_id',
-            // 'city',
-            // 'zip',
-            // 'address',
-            // 'avatar',
+            [
+                'attribute'=>'status',
+                'label'=>'Status',
+                'value' => function ($data) {
+                    if($data->status==1)
+                        return 'panding';
+                    if($data->status==0)
+                        return 'enabled';
+                    if($data->status==2)
+                        return 'blocked';
+                },
+            ],
 
             ['class' => 'yii\grid\ActionColumn'],
         ],

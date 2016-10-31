@@ -44,10 +44,19 @@ AppAsset::register($this);
     echo Nav::widget([
         'options' => ['class' => 'navbar-nav navbar-right'],
         'items' => [
-            ['label' => 'Home', 'url' => ['/home']],
-            ['label' => 'User', 'url' => ['/user']],
-            ['label' => 'Project', 'url' => ['/project']],
-            ['label' => 'Sign up', 'url' => ['/signup']],
+            ['label' => 'Home', 'url' => ['/home'],'visible' => !Yii::$app->user->isGuest],
+            ['label' => 'User', 'url' => ['/user'],'visible' => !Yii::$app->user->isGuest],
+            ['label' => 'Project', 'url' => ['/project'],'visible' => !Yii::$app->user->isGuest ],
+
+            Yii::$app->user->isGuest ?
+                [
+                    'label' => 'Sign up', 'url' => ['/signup']
+                ]
+
+                :
+                [
+                    'label' => 'Profile', 'url' => ['/home/profile']
+                ],
 
             Yii::$app->user->isGuest ?
             [

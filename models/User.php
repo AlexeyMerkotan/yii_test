@@ -5,6 +5,7 @@ namespace app\models;
 use Yii;
 use yii\db\ActiveRecord;
 use yii\web\IdentityInterface;
+use yii\behaviors\TimestampBehavior;
 
 /**
  * This is the model class for table "{{%user}}".
@@ -48,7 +49,7 @@ class User extends ActiveRecord implements IdentityInterface
     {
         return [
             [['email', 'auth_key', 'password_hash'], 'required'],
-            [['status', 'country_id'], 'integer'],
+            [['status', 'country_id','created_at','updated_at'], 'integer'],
             [['name', 'city', 'address'], 'string', 'max' => 100],
             [['password_hash', 'avatar'], 'string', 'max' => 255],
             [['auth_key'], 'string', 'max' => 32],
@@ -56,7 +57,6 @@ class User extends ActiveRecord implements IdentityInterface
             [['phone'], 'string', 'max' => 50],
             [['zip'], 'string', 'max' => 10],
             [['email'], 'unique'],
-            [['country_id'], 'exist', 'skipOnError' => true, 'targetAttribute' => ['country_id' => 'id']],
 
             ['email', 'trim'],
             ['email', 'required'],
@@ -65,10 +65,6 @@ class User extends ActiveRecord implements IdentityInterface
             ['email', 'unique', 'message' => 'This email address has already been taken.'],
 
             [['bithday'], 'date', 'format' => 'Y-m-d'],
-
-            [['created_at'], 'date', 'format' => 'Y-m-d'],
-
-            [['updated_at'], 'date', 'format' => 'Y-m-d'],
 
             ['password', 'string', 'min' => 6],
 
@@ -82,6 +78,25 @@ class User extends ActiveRecord implements IdentityInterface
             $this->bithday = strtotime($this->bithday);
         }
         return parent::afterValidate();
+    }
+
+
+    public function functionStatus($data){
+        if($data==1)
+            return 'panding';
+        if($data==0)
+            return 'enabled';
+        if($data==2)
+            return 'blocked';
+    }
+
+
+    public function behaviors()
+    {
+        return [
+
+               TimestampBehavior::className(),
+        ];
     }
 
     /**
