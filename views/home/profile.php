@@ -25,6 +25,8 @@ $datePickerRange = (date('Y') - 100) . ':' . date('Y');
 
     <?= Html::img($model->avatar, ['alt' => $model->avatar]) ?>
 
+    <?= $form->field($model, 'avatar')->fileInput()  ?>
+
     <?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
 
     <?= $form->field($model, 'email')->textInput(['maxlength' => true]) ?>
@@ -32,6 +34,8 @@ $datePickerRange = (date('Y') - 100) . ':' . date('Y');
     <?php //$form->field($model, 'auth_key')->passwordInput(['maxlength' => true]) ?>
 
     <?= $form->field($model, 'password')->passwordInput() ?>
+
+    <?= $form->field($model, 'password_2')->passwordInput() ?>
 
     <?php //$form->field($model, 'created_at')->textInput() ?>
 
@@ -51,7 +55,14 @@ $datePickerRange = (date('Y') - 100) . ':' . date('Y');
 
     <?= $form->field($model, 'phone')->textInput() ?>
 
-    <?= $form->field($model, 'country')->textInput() ?>
+    <?php
+    $country = \app\models\Country::find()->all();
+    $items = \yii\helpers\ArrayHelper::map($country,'id','name');
+    ?>
+
+    <?= $form->field($model, 'country_id')->dropDownList($items,[
+        'prompt' => 'Select...'
+    ]);?>
 
 
     <?= $form->field($model, 'city')->textInput(['maxlength' => true]) ?>
@@ -60,7 +71,6 @@ $datePickerRange = (date('Y') - 100) . ':' . date('Y');
 
     <?= $form->field($model, 'address')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'avatar')->fileInput()  ?>
 
     <div class="form-group">
         <?= Html::submitButton($model->isNewRecord ? Yii::t('app', 'Sign up') : Yii::t('app', 'Update'), ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>

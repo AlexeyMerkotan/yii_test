@@ -38,13 +38,16 @@ class UserController extends Controller
     public function actionIndex()
     {
         if(!Yii::$app->user->isGuest) {
-            $searchModel = new UserSearch();
-            $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+            if(Yii::$app->user->identity->role==User::admin){
+                $searchModel = new UserSearch();
+                $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
-            return $this->render('index', [
-                'searchModel' => $searchModel,
-                'dataProvider' => $dataProvider,
-            ]);
+                return $this->render('index', [
+                    'searchModel' => $searchModel,
+                    'dataProvider' => $dataProvider,
+                ]);
+            }
+            return $this->redirect(['/home']);
         }else
             return $this->redirect(['/home']);
     }
@@ -57,9 +60,12 @@ class UserController extends Controller
     public function actionView($id)
     {
         if(!Yii::$app->user->isGuest) {
-            return $this->render('view', [
-                'model' => $this->findModel($id),
-            ]);
+            if(Yii::$app->user->identity->role==User::admin){
+                return $this->render('view', [
+                    'model' => $this->findModel($id),
+                ]);
+            }
+            return $this->redirect(['/home']);
         }else
             return $this->redirect(['/home']);
 
@@ -73,36 +79,38 @@ class UserController extends Controller
     public function actionCreate()
     {
         if(!Yii::$app->user->isGuest) {
-            $model = new User();
+            if(Yii::$app->user->identity->role==User::admin) {
+                $model = new User();
 
 
-            if ($model->load(Yii::$app->request->post()) ) {
+                if ($model->load(Yii::$app->request->post())) {
 
-                $model->setPassword($model->password);
+                    $model->setPassword($model->password,$model->password_2);
 
-                $model->generateAuthKey();
+                    $model->generateAuthKey();
 
-                $model->status();
+                    $model->status();
 
-                if(UploadedFile::getInstance($model, 'avatar'))
-                {
-                    $avatar = UploadedFile::getInstance($model, 'avatar');
+                    if (UploadedFile::getInstance($model, 'avatar')) {
+                        $avatar = UploadedFile::getInstance($model, 'avatar');
 
-                    $type=substr($avatar->type,6);
+                        $type = substr($avatar->type, 6);
 
-                    $today = new \DateTime('now');
+                        $today = new \DateTime('now');
 
-                    $avatar->saveAs('avatar/' . $today->date . '.' . $type);
+                        $avatar->saveAs('avatar/' . $today->date . '.' . $type);
 
-                    $model->avatar='avatar/' . $today->date . '.' . $type;
+                        $model->avatar = 'avatar/' . $today->date . '.' . $type;
+                    }
+                    if ($model->save())
+                        return $this->redirect(['view', 'id' => $model->id]);
+                } else {
+                    return $this->render('create', [
+                        'model' => $model,
+                    ]);
                 }
-                if($model->save())
-                    return $this->redirect(['view', 'id' => $model->id]);
-            } else {
-                return $this->render('create', [
-                    'model' => $model,
-                ]);
             }
+            return $this->redirect(['/home']);
         }else
             return $this->redirect(['/home']);
 
@@ -117,28 +125,33 @@ class UserController extends Controller
     public function actionUpdate($id)
     {
         if(!Yii::$app->user->isGuest) {
-            $model = $this->findModel($id);
+            if(Yii::$app->user->identity->role==User::admin) {
+                $model = $this->findModel($id);
 
-            if ($model->load(Yii::$app->request->post()) ) {
-                if(UploadedFile::getInstance($model, 'avatar'))
-                {
-                    $avatar = UploadedFile::getInstance($model, 'avatar');
+                if ($model->load(Yii::$app->request->post())) {
 
-                    $type=substr($avatar->type,6);
+                    $model->setPassword($model->password,$model->password_2);
 
-                    $today = new \DateTime('now');
+                    if (UploadedFile::getInstance($model, 'avatar')) {
+                        $avatar = UploadedFile::getInstance($model, 'avatar');
 
-                    $avatar->saveAs('avatar/' . $today->date . '.' . $type);
+                        $type = substr($avatar->type, 6);
 
-                    $model->avatar='avatar/' . $today->date . '.' . $type;
+                        $today = new \DateTime('now');
+
+                        $avatar->saveAs('avatar/' . $today->date . '.' . $type);
+
+                        $model->avatar = 'avatar/' . $today->date . '.' . $type;
+                    }
+                    if ($model->save())
+                        return $this->redirect(['view', 'id' => $model->id]);
+                } else {
+                    return $this->render('update', [
+                        'model' => $model,
+                    ]);
                 }
-                if($model->save())
-                    return $this->redirect(['view', 'id' => $model->id]);
-            } else {
-                return $this->render('update', [
-                    'model' => $model,
-                ]);
             }
+            return $this->redirect(['/home']);
         }else
             return $this->redirect(['/home']);
 
@@ -154,9 +167,12 @@ class UserController extends Controller
     public function actionDelete($id)
     {
         if(!Yii::$app->user->isGuest) {
-            $this->findModel($id)->delete();
+            if(Yii::$app->user->identity->role==User::admin) {
+                $this->findModel($id)->delete();
 
-            return $this->redirect(['index']);
+                return $this->redirect(['index']);
+            }
+            return $this->redirect(['/home']);
         }else
             return $this->redirect(['/home']);
 

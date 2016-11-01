@@ -229,25 +229,24 @@ $(function() {
     });*/
 
 
-    $(document).on('change','.proj',function () {
+    $(document).on('click','#filter',function () {
 
-        if($(this).is(":checked")){
-            //var selected=$(this).val();
-            var selected = [];
+
+        var id_user = [];
+        $('.user input:checkbox:checked').each(function(){
+            var checkbox_value = $(this).val();
+            id_user.push(checkbox_value);
+        });
+
+            var id_project = [];
             $('.project input:checkbox:checked').each(function(){
                 var checkbox_value = $(this).val();
-                selected.push(checkbox_value);
+                id_project.push(checkbox_value);
             });
 
-            var select = [];
-            $('.user input:checkbox:checked').each(function(){
-                var checkbox_value = $(this).val();
-                select.push(checkbox_value);
-            });
-            console.log(select);
             var form=new FormData();
-            form.append('id',selected);
-            form.append('select',select);
+            form.append('id_user',JSON.stringify(id_user));
+            form.append('id_project',JSON.stringify(id_project));
             $.ajax({
                 url:'index.php?r=view%2Fchechviewproject',
                 type: "post",
@@ -257,7 +256,8 @@ $(function() {
                 processData:false,
                 data: form,
                 success:function (date) {
-                    var project=$.parseJSON(data);
+                    var project=$.parseJSON(date);
+                    $('#calendar').fullCalendar('removeEvents');
                     $.each(project, function(key, value) {
                         var eventData = {
                             id:value.id,
@@ -266,31 +266,10 @@ $(function() {
                             end: value.end_at,
                             color:value.color,
                         };
-                        $('#calendar').fullCalendar('removeEvents', value.id);
                         $('#calendar').fullCalendar('renderEvent', eventData, true);
                     })
                 }
             });
-
-
-           /* $.get('index.php?r=view%2Fchechviewproject',{'select':select},function(data){
-                var project=$.parseJSON(data);
-                $.each(project, function(key, value) {
-                    var eventData = {
-                        id:value.id,
-                        title: "Project("+value.project+")",
-                        start: value.start_at,
-                        end: value.end_at,
-                        color:value.color,
-                    };
-                    $('#calendar').fullCalendar('removeEvents', value.id);
-                    $('#calendar').fullCalendar('renderEvent', eventData, true);
-                })
-            });*/
-        }
-
-
-
 
     });
 

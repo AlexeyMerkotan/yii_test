@@ -33,6 +33,7 @@ class User extends ActiveRecord implements IdentityInterface
 {
 
     public $password;
+    public $password_2;
 
     /**
      * @inheritdoc
@@ -42,6 +43,7 @@ class User extends ActiveRecord implements IdentityInterface
         return '{{%user}}';
     }
 
+    const admin = '1';
     /**
      * @inheritdoc
      */
@@ -49,7 +51,7 @@ class User extends ActiveRecord implements IdentityInterface
     {
         return [
             [['email', 'auth_key', 'password_hash'], 'required'],
-            [['status', 'country_id','created_at','updated_at'], 'integer'],
+            [['status', 'role','country_id','created_at','updated_at'], 'integer'],
             [['name', 'city', 'address'], 'string', 'max' => 100],
             [['password_hash', 'avatar'], 'string', 'max' => 255],
             [['auth_key'], 'string', 'max' => 32],
@@ -67,6 +69,8 @@ class User extends ActiveRecord implements IdentityInterface
             [['bithday'], 'date', 'format' => 'Y-m-d'],
 
             ['password', 'string', 'min' => 6],
+
+            ['password_2', 'string', 'min' => 6],
 
 
         ];
@@ -121,6 +125,7 @@ class User extends ActiveRecord implements IdentityInterface
             'zip' => Yii::t('app', 'Zip'),
             'address' => Yii::t('app', 'Address'),
             'avatar' => Yii::t('app', 'Avatar'),
+            'role' => Yii::t('app', 'Role'),
         ];
     }
 
@@ -147,9 +152,10 @@ class User extends ActiveRecord implements IdentityInterface
      *
      * @param string $password
      */
-    public function setPassword($password)
+    public function setPassword($password,$password_2)
     {
-        $this->password_hash = Yii::$app->security->generatePasswordHash($password);
+        if($password==$password_2 && isset($password) && isset($password_2))
+            $this->password_hash = Yii::$app->security->generatePasswordHash($password);
     }
 
     /**
@@ -163,8 +169,9 @@ class User extends ActiveRecord implements IdentityInterface
     public function status()
     {
         $this->status = '0';
-    }
+        $this->role='0';
 
+    }
 
     public function validatePassword($password)
     {

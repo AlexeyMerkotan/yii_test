@@ -29,8 +29,20 @@ $this->params['breadcrumbs'][] = $this->title;
             'id',
             'name',
             'email:email',
-             'created_at',
-             'updated_at',
+            [
+                'attribute'=>'status',
+                'label'=>'Status',
+                'value' => function ($data) {
+                        return date('Y-m-d',$data->created_at);
+                },
+            ],
+            [
+                'attribute'=>'status',
+                'label'=>'Status',
+                'value' => function ($data) {
+                    return date('Y-m-d',$data->updated_at);;
+                },
+            ],
             [
                 'attribute'=>'status',
                 'label'=>'Status',
@@ -43,6 +55,17 @@ $this->params['breadcrumbs'][] = $this->title;
                         return 'blocked';
                 },
             ],
+            [
+                'attribute'=>'role',
+                'label'=>'Role',
+                'value' => function ($data) {
+                    if($data->role==1)
+                        return 'admin';
+                    if($data->role==0)
+                        return 'user';
+                },
+            ],
+
 
             ['class' => 'yii\grid\ActionColumn'],
         ],

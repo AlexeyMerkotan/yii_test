@@ -24,10 +24,18 @@ $datePickerRange = (date('Y') - 100) . ':' . date('Y');
 
     <?= $form->field($model, 'password')->passwordInput(['maxlength' => true]) ?>
 
+    <?= $form->field($model, 'password_2')->passwordInput(['maxlength' => true]) ?>
+
     <?= $form->field($model, 'status')->dropDownList([
         '0' => 'enabled',
         '1' => 'pending',
         '2' => 'blocked'
+    ]);?>
+
+
+    <?= $form->field($model, 'role')->dropDownList([
+        '0' => 'user',
+        '1' => 'admin',
     ]);?>
 
 
@@ -64,6 +72,9 @@ $datePickerRange = (date('Y') - 100) . ':' . date('Y');
         <?= Html::submitButton($model->isNewRecord ? Yii::t('app', 'Create') : Yii::t('app', 'Update'), ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
     </div>
 
+
     <?php ActiveForm::end(); ?>
+
+
 
 </div>

@@ -34,7 +34,7 @@ class SignupController extends Controller
             $model = new User();
             if ($model->load(Yii::$app->request->post())&& Yii::$app->user->isGuest) {
 
-                $model->setPassword($model->password);
+                $model->setPassword($model->password,$model->password_2);
 
                 $model->generateAuthKey();
 
@@ -60,8 +60,6 @@ class SignupController extends Controller
 
                 if($model->save())
                     return $this->redirect(['/login/index']);
-                else
-                    print_r($model->errors);
 
             } else {
 

@@ -37,6 +37,7 @@ class m161019_130818_create_users_table extends Migration
             'avatar' =>$this->string()->defaultValue(null),
             'created_at' => $this->integer()->defaultValue(null),
             'updated_at' => $this->integer()->defaultValue(null),
+            'role' => $this->integer(1)->defaultValue(null),
         ], $tableOptions);
 
         $this->addForeignKey('fk_user_country', '{{%user}}', 'country_id', '{{%country}}', 'id', 'SET NULL', 'CASCADE');

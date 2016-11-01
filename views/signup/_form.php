@@ -24,6 +24,8 @@ $datePickerRange = (date('Y') - 100) . ':' . date('Y');
 
     <?= $form->field($model, 'password')->passwordInput(['maxlength' => true]) ?>
 
+    <?= $form->field($model, 'password_2')->passwordInput(['maxlength' => true]) ?>
+
     <?php //$form->field($model, 'created_at')->textInput() ?>
 
     <?php //$form->field($model, 'updated_at')->textInput() ?>
