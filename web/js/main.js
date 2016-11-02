@@ -1,6 +1,8 @@
 var start_at;
 var id;
 var user;
+
+
 function Select_Project(select) {
     $.get('index.php?r=modelview%2Fselect',{'select':select},function(date){
         var project=$.parseJSON(date);
@@ -15,6 +17,9 @@ function Select_Project(select) {
 
 }
 function clean() {
+
+    $("p.help-block-error").empty();
+    $(".form-group").removeClass("has-error");
     $('#modal').on('hidden.bs.modal', function () {
         $(this).find("input,textarea,select").val('').end();
     });
@@ -171,75 +176,6 @@ $(function() {
 
 
 
-    /*$(document).on('change','.user',function () {
-
-        if($(this).is(":checked")){
-            var selected=$(this).val();
-            $.get('index.php?r=view%2Fchechviewuser',{'id':selected},function(data){
-                var project=$.parseJSON(data);
-                $.each(project, function(key, value) {
-                    var eventData = {
-                        id:value.id,
-                        title: "Project("+value.project+")",
-                        start: value.start_at,
-                        end: value.end_at,
-                        color:value.color,
-                    };
-                    $('#calendar').fullCalendar('removeEvents', value.id);
-                    $('#calendar').fullCalendar('renderEvent', eventData, true);
-                })
-            });
-        } else {
-            var selected=$(this).val();
-            $.get('index.php?r=view%2Fchechuser',{'id':selected},function(data){
-                var project=$.parseJSON(data);
-                $.each(project, function(key, value) {
-                    $('#calendar').fullCalendar('removeEvents', value.id);
-                })
-            });
-        }
-
-
-
-
-    });
-
-
-
-    $(document).on('change','.project',function () {
-
-        if($(this).is(":checked")){
-            var selected=$(this).val();
-            $.get('index.php?r=view%2Fchechviewproject',{'id':selected},function(data){
-                var project=$.parseJSON(data);
-                $.each(project, function(key, value) {
-                    var eventData = {
-                        id:value.id,
-                        title: "Project("+value.project+")",
-                        start: value.start_at,
-                        end: value.end_at,
-                        color:value.color,
-                    };
-                    $('#calendar').fullCalendar('removeEvents', value.id);
-                    $('#calendar').fullCalendar('renderEvent', eventData, true);
-                })
-            });
-        } else {
-            var selected=$(this).val();
-            $.get('index.php?r=view%2Fchechproject',{'id':selected},function(data){
-                var project=$.parseJSON(data);
-                $.each(project, function(key, value) {
-                    $('#calendar').fullCalendar('removeEvents', value.id);
-                })
-            });
-
-        }
-
-
-
-
-    });*/
-
 
     $(document).on('click','#filter',function () {
 
@@ -293,6 +229,8 @@ $(function() {
 
     //add data calendar
     $(document).on('click','.btn-success',function () {
+
+        clean();
         var form=new FormData();
         form.append('start_at',$('#calendar-start_at').val());
         form.append('id_user',$('#calendar-id_user').val());
@@ -308,19 +246,28 @@ $(function() {
             processData:false,
             data: form,
             success:function (date) {
+                $('#messageShow').hide();
+                var error="";
                 var project=$.parseJSON(date);
                 $.each(project, function(key, value) {
 
+                    if(value.flag){
+                        var eventData = {
+                            id: value.id,
+                            title: "Project("+value.project+")",
+                            start: value.start_at,
+                            end: value.end_at,
+                            color:value.color,
+                        };
+                        $('#calendar').fullCalendar('renderEvent', eventData, true);
+                        $('#calendar').fullCalendar('addEventSource',eventData);
+                        $('#modal').modal('hide');
+                    }else {
+                        $('#calendar-form').data('yiiActiveForm').submitting = true;
 
-                    var eventData = {
-                        id: value.id,
-                        title: "Project("+value.project+")",
-                        start: value.start_at,
-                        end: value.end_at,
-                        color:value.color,
-                    };
-                    $('#calendar').fullCalendar('renderEvent', eventData, true);
-                    $('#calendar').fullCalendar('addEventSource',eventData);
+                        $('#calendar-form').yiiActiveForm('validate');
+                    }
+
 
                 })
 
@@ -358,118 +305,3 @@ $(function() {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//alert(id);
-/* $('#modal1').modal('show')
- .find('#modal-content')
- .load($(this).attr('data-target'));*/
-
-
-
-
-
-/* var id=6;
- $.get('index.php?r=signup%2Fdetermine',{'id':id},function(date){
- var project=$.parseJSON(date);
- $.each(project, function(key, value) {
- $('#comment').append( {
- text: value.name
- });
- var option1 = $('#calendar-id_project').append($("<option >", {
- "value": value.id,
- text: value.name
- }));
-
- })
- });
- $.get('index.php?r=signup%2Fselectview',function(date){
- var project=$.parseJSON(date);
- $('#calendar-id_project').html('');
- $.each(project, function(key, value) {
- var option1 = $('#calendar-id_user').append($("<option >", {
- "value": value.id,
- text: value.name
- }));
- })
- });*/
-
-
-
-/*$('#calendar-id_project').append($("", {
- value: value.id,
- text: value.name
- }));*/
-//$('#calendar-id_project').append("<option value='" + value.id + "'>" + value.name + "</option>");
-
-/*
-
-
- $.ajax({
- url:'index.php?r=signup%2Fselect',
- dataType:'text',
- cache:false,
- contentType:false,
- processData:false,
- data:{ select:' select'},
- ssuccess:function (data) {
- alert(sdata);
- $.each(newOptions, function(key, value) {
- $('#calendar-id_project').append($("", {
- value: key,
- text: value
- }));
- })
- //http://www.webnotes.com.ua/index.php/archives/699
- }
- });*/
-/*function (start, end) {
- var title = prompt('Event Title:');
- var eventData;
- if (title) {
- eventData = {
- title: title,
- start: start,
- end: end
- };
- $('#w0').fullCalendar('renderEvent', eventData, true);
- }
- $('#w0').fullCalendar('unselect');
- }
- function (calEvent, jsEvent, view) {
-
- alert('Event: ' + calEvent.title);
- alert('Coordinates: ' + jsEvent.pageX + ',' + jsEvent.pageY);
- alert('View: ' + view.name);
-
- // change the border color just for fun
- $(this).css('border-color', 'red');
-
- }*/

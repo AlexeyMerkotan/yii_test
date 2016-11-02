@@ -18,7 +18,7 @@ $datePickerRange = (date('Y') - 100) . ':' . date('Y');
     'size' => 'modal-md',
 ]);
 ?>
-<?php $form = ActiveForm::begin(); ?>
+<?php $form = ActiveForm::begin(['id'=>'calendar-form']); ?>
 
 
 <?= $form->field($calendar, 'id_user')->dropDownList($items,[
@@ -36,13 +36,12 @@ $datePickerRange = (date('Y') - 100) . ':' . date('Y');
 <?=  $form->field($calendar, 'start_at')->widget(DateTimePicker::className(),[
     'options' => ['placeholder' => 'Start time...'],
     'pluginOptions' => ['autoclose' => true],
-    'readonly' => true,
 ]); ?>
 
 <?=  $form->field($calendar, 'end_at')->widget(DateTimePicker::className(),[
     'options' => ['placeholder' => 'Start time...'],
     'pluginOptions' => ['autoclose' => true],
-    'readonly' => true,
+
 ]); ?>
 
 
@@ -52,7 +51,7 @@ $datePickerRange = (date('Y') - 100) . ':' . date('Y');
 <?= $form->field($calendar, 'comment')->textarea(['rows' => 6]) ?>
 
 
-<button type="button" class="btn btn-success" data-dismiss="modal">Create</button>
+<button type="button" class="btn btn-success">Create</button>
 
 <button type="button" class="btn btn-primary">Update</button>
 

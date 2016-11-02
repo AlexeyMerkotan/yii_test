@@ -62,8 +62,8 @@ class Calendar extends \yii\db\ActiveRecord
     {
         return [
             'id' => Yii::t('app', 'ID'),
-            'id_user' => Yii::t('app', 'Id User'),
-            'id_project' => Yii::t('app', 'Id Project'),
+            'id_user' => Yii::t('app', 'User'),
+            'id_project' => Yii::t('app', 'Project'),
             'start_at' => Yii::t('app', 'Start At'),
             'end_at' => Yii::t('app', 'End At'),
             'comment' => Yii::t('app', 'Comment'),

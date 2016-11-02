@@ -47,34 +47,27 @@ class ModelviewController extends \yii\web\Controller
         $calendar = new Calendar();
         $calendar->load(\Yii::$app->request->post(),'');
         $calendar->save();
-        $project = Project::findOne($calendar->id_project);
-        $user=User::findOne($calendar->id_user);
-        $array = [
-            'id'=>$calendar->id,
-            'project'=>$project->name,
-            'start_at'=>date('Y-m-d\TH:i:s\Z',$calendar->start_at),
-            'end_at'=>date('Y-m-d\TH:i:s\Z',$calendar->end_at),
-            'color'=>$user->color,
-        ];
-        $arr[]=$array;
-        echo Json::encode($arr);
-
-
-    }
-
-    //select user
-    public function actionSelectview(){
-        $query=User::find()->all();
-        $arr=[];
-        foreach ($query as $item) {
+        if(!$calendar->errors){
+            $project = Project::findOne($calendar->id_project);
+            $user=User::findOne($calendar->id_user);
             $array = [
-                'id'=>$item->id,
-                'name'=>$item->name,
+                'flag'=>true,
+                'id'=>$calendar->id,
+                'project'=>$project->name,
+                'start_at'=>date('Y-m-d\TH:i:s\Z',$calendar->start_at),
+                'end_at'=>date('Y-m-d\TH:i:s\Z',$calendar->end_at),
+                'color'=>$user->color,
             ];
             $arr[]=$array;
+            echo Json::encode($arr);
+        }else {
+            $var = [
+                'flag' => false,
+            ];
+            echo Json::encode($var);
         }
-        echo Json::encode($arr);
     }
+
 
     //save update calendaar
     public function actionUpdate(){
