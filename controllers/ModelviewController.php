@@ -83,9 +83,11 @@ class ModelviewController extends \yii\web\Controller
         $calendar->load(\Yii::$app->request->post(),'');
         $calendar->save();
         $user=User::findOne($calendar->id_user);
+        $project=Project::findOne($calendar->id_project);
         $array=['id'=> $calendar->id,
             'id_user'=> $calendar->id_user,
             'id_project'=> $calendar->id_project,
+            'project'=>$project->name,
             'start_at'=> date('Y-m-d\TH:i:s\Z',$calendar->start_at),
             'end_at'=> date('Y-m-d\TH:i:s\Z',$calendar->end_at),
             'color'=>$user->color,];

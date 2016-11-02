@@ -102,4 +102,22 @@ return array (
       '@yii2fullcalendar' => $vendorDir . '/philippfrenzel/yii2fullcalendar',
     ),
   ),
+  'kartik-v/yii2-widget-timepicker' => 
+  array (
+    'name' => 'kartik-v/yii2-widget-timepicker',
+    'version' => '1.0.1.0',
+    'alias' => 
+    array (
+      '@kartik/time' => $vendorDir . '/kartik-v/yii2-widget-timepicker',
+    ),
+  ),
+  'kartik-v/yii2-widget-datetimepicker' => 
+  array (
+    'name' => 'kartik-v/yii2-widget-datetimepicker',
+    'version' => '1.4.2.0',
+    'alias' => 
+    array (
+      '@kartik/datetime' => $vendorDir . '/kartik-v/yii2-widget-datetimepicker',
+    ),
+  ),
 );

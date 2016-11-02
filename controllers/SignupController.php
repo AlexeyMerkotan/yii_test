@@ -7,6 +7,7 @@ use app\models\User;
 use yii\web\Controller;
 use yii\filters\VerbFilter;
 use yii\web\UploadedFile;
+use yii\swiftmailer\Mailer;
 
 
 /**
@@ -59,7 +60,10 @@ class SignupController extends Controller
                 }
 
                 if($model->save())
+                {
+                    self::mailSend($model);
                     return $this->redirect(['/login/index']);
+                }
 
             } else {
 
@@ -73,6 +77,18 @@ class SignupController extends Controller
         }
 
 
+    }
+
+    private function mailSend($model)
+    {
+        $user=User::find()->where(['role'=>'1'])->one();
+        Yii::$app->mailer->compose()
+            ->setFrom($model->email)
+            ->setTo($user->email)
+            ->setSubject('New user in the system')
+            ->setTextBody('New user in the system email('.$model->email.'), name ('.$model->name.')')
+            ->setHtmlBody('<b>HTML content</b>')
+            ->send();
     }
 
 

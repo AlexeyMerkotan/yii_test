@@ -21,7 +21,9 @@
         "kartik-v/yii2-widget-colorinput": "*",
         "kartik-v/yii2-datecontrol": "*",
         "yiisoft/yii2-jui": "*",
-        "philippfrenzel/yii2fullcalendar":"*"
+        "philippfrenzel/yii2fullcalendar":"*",
+        "kartik-v/yii2-widget-timepicker": "*",
+        "kartik-v/yii2-widget-datetimepicker": "*"
     },
     "require-dev": {
         "yiisoft/yii2-codeception": "*",

@@ -18,6 +18,7 @@ use \yii2fullcalendar\yii2fullcalendar;
 
 
 
+
 $this->title = 'Home';
 $datePickerRange = (date('Y') - 100) . ':' . date('Y');
 ?>

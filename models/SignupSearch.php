@@ -7,6 +7,7 @@ use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use app\models\User;
 
+
 /**
  * SignupSearch represents the model behind the search form about `app\models\User`.
  */

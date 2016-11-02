@@ -93,6 +93,10 @@ class User extends ActiveRecord implements IdentityInterface
         if($data==2)
             return 'blocked';
     }
+    public function functionCountry($data){
+        $country = Country::find()->where(['id'=>$data])->one();
+        return $country->name;
+    }
 
 
     public function behaviors()

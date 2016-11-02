@@ -31,8 +31,16 @@ $this->params['breadcrumbs'][] = $this->title;
             'id',
             'name',
             'description:ntext',
-            'start_at',
-            'end_at',
+            [
+                'attribute'=>'start_at',
+                'value'=>date('Y-m-d',$model->start_at),
+
+            ],
+            [
+                'attribute'=>'end_at',
+                'value'=>date('Y-m-d',$model->end_at),
+
+            ],
         ],
     ]) ?>
 

@@ -23,7 +23,9 @@ $datePickerRange = (date('Y') - 100) . ':' . date('Y');
     ]);
     ?>
 
+    <?php if($model->avatar!=NULL) :?>
     <?= Html::img($model->avatar, ['alt' => $model->avatar]) ?>
+    <?php endif;?>
 
     <?= $form->field($model, 'avatar')->fileInput()  ?>
 

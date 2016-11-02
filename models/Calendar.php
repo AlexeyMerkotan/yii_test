@@ -40,7 +40,7 @@ class Calendar extends \yii\db\ActiveRecord
             [['id_user'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['id_user' => 'id']],
 
 
-            [['start_at','end_at'], 'date', 'format' => 'Y-m-d'],
+            [['start_at','end_at'], 'date', 'format' => 'yyyy-MM-dd HH:mm'],
 
         ];
     }

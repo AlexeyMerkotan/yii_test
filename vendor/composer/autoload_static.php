@@ -27,7 +27,9 @@ class ComposerStaticInitf7d7cb119b69cacb4e4b992aa7bc9bb3
         ),
         'k' => 
         array (
+            'kartik\\time\\' => 12,
             'kartik\\plugins\\dateformatter\\' => 29,
+            'kartik\\datetime\\' => 16,
             'kartik\\datecontrol\\' => 19,
             'kartik\\color\\' => 13,
             'kartik\\base\\' => 12,
@@ -83,9 +85,17 @@ class ComposerStaticInitf7d7cb119b69cacb4e4b992aa7bc9bb3
         array (
             0 => __DIR__ . '/..' . '/philippfrenzel/yii2fullcalendar',
         ),
+        'kartik\\time\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/kartik-v/yii2-widget-timepicker',
+        ),
         'kartik\\plugins\\dateformatter\\' => 
         array (
             0 => __DIR__ . '/..' . '/kartik-v/php-date-formatter',
+        ),
+        'kartik\\datetime\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/kartik-v/yii2-widget-datetimepicker',
         ),
         'kartik\\datecontrol\\' => 
         array (

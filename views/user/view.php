@@ -32,13 +32,20 @@ $this->params['breadcrumbs'][] = $this->title;
             'id',
             'name',
             'email:email',
-            'created_at',
-            'updated_at',
-            array(
-                'attribute'=>'status',
-                'label'=>'Status',
-                'value' => $model->functionStatus($model->status),
-            ),
+            [
+                'attribute'=>'created_at',
+                'value'=>date('Y-m-d',$model->created_at),
+
+            ],
+            [
+                'attribute'=>'updated_at',
+                'value'=>date('Y-m-d',$model->updated_at),
+
+            ],
+            [ 'attribute'=>'status',
+                'label'=>'Status', 'value' => $model->functionStatus($model->status),]
+
+            ,
             'color',
             [
                 'attribute'=>'bithday',
@@ -46,7 +53,8 @@ $this->params['breadcrumbs'][] = $this->title;
 
             ],
             'phone',
-            'country_id',
+            [ 'attribute'=>'country',
+                'label'=>'Status', 'value' => $model->functionCountry($model->country_id),],
             'city',
             'address',
             'avatar',

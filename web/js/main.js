@@ -39,9 +39,21 @@ $(function() {
         var queryDate = start_at,
             dateParts = queryDate.match(/(\d+)/g),
             realDate = new Date(dateParts[0], dateParts[1] - 1, dateParts[2]);
-        $('#date-picker1-update').datepicker('setDate', (realDate) );
+        $('#calendar-start_at').datetimepicker('setDate', (realDate) );
 
 
+    });
+
+
+    $(document).on('click','.btn-info',function () {
+
+        clean();
+        $('.btn-success').show();
+        $('.btn-primary').hide();
+        $('.btn-danger').hide();
+        $('#modal').modal('show')
+            .find('#modal-content')
+            .load($(this).attr('data-target'));
 
     });
 
@@ -135,14 +147,14 @@ $(function() {
                 if(key=='start_at'){
                     var queryDate = value,
                         dateParts = queryDate.match(/(\d+)/g),
-                        realDate = new Date(dateParts[0], dateParts[1] - 1, dateParts[2]);
-                    $('#date-picker1-update').datepicker('setDate', (realDate) );
+                        realDate = new Date(dateParts[0], dateParts[1] - 1, dateParts[2],dateParts[3],dateParts[4]);
+                    $('#calendar-start_at').datetimepicker('setDate', (realDate) );
                 }
                 if(key=='end_at'){
                     var queryDate = value,
                         dateParts = queryDate.match(/(\d+)/g),
-                        realDate = new Date(dateParts[0], dateParts[1] - 1, dateParts[2]);
-                    $('#date-picker').datepicker('setDate', (realDate) );
+                        realDate = new Date(dateParts[0], dateParts[1] - 1, dateParts[2],dateParts[3],dateParts[4]);
+                    $('#calendar-end_at').datetimepicker('setDate', (realDate) );
                 }
                 if(key=='comment'){
                     $('#calendar-comment').val(value);
