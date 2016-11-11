@@ -29,7 +29,6 @@ function clean() {
 $(function() {
 
 
-    $( "#draggable" ).draggable();
     //view model windows
     $(document).on('click','.fc-day',function () {
 
@@ -50,7 +49,7 @@ $(function() {
     });
 
 
-    $(document).on('click','.btn-info',function () {
+    $(document).on('click','#event',function () {
 
         clean();
         $('.btn-success').show();

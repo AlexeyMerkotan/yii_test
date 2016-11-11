@@ -46,9 +46,12 @@ AppAsset::register($this);
         'items' => [
             ['label' => 'Home', 'url' => ['/home'],'visible' => !Yii::$app->user->isGuest],
 
+            [ 'label' => 'Tasks', 'url' => ['/home/tasks'],'visible' => !Yii::$app->user->isGuest],
+
             ['label' => 'User', 'url' => ['/user'],'visible' => !Yii::$app->user->isGuest and Yii::$app->user->identity->role==\app\models\User::admin],
 
             ['label' => 'Project', 'url' => ['/project'],'visible' => !Yii::$app->user->isGuest and Yii::$app->user->identity->role==\app\models\User::admin],
+
 
             [ 'label' => 'Sign up', 'url' => ['/signup'],'visible' => Yii::$app->user->isGuest],
 
