@@ -33,9 +33,9 @@ $(function() {
     $(document).on('click','.fc-day',function () {
 
         clean();
-        $('.btn-success').show();
-        $('.btn-primary').hide();
-        $('.btn-danger').hide();
+        $('#create_date').show();
+        $('#update_date').hide();
+        $('#remove_date').hide();
         start_at=$(this).attr('data-date');
         $('#modal').modal('show')
             .find('#modal-content')
@@ -52,9 +52,9 @@ $(function() {
     $(document).on('click','#event',function () {
 
         clean();
-        $('.btn-success').show();
-        $('.btn-primary').hide();
-        $('.btn-danger').hide();
+        $('#create_date').show();
+        $('#update_date').hide();
+        $('#remove_date').hide();
         $('#modal').modal('show')
             .find('#modal-content')
             .load($(this).attr('data-target'));
@@ -62,7 +62,7 @@ $(function() {
     });
 
     //delete data calendar
-    $(document).on('click','.btn-danger',function(){
+    $(document).on('click','#remove_date',function(){
         var form=new FormData();
         form.append('id',id);
         $.ajax({
@@ -86,7 +86,7 @@ $(function() {
 
 
     //data update
-    $(document).on('click','.btn-primary',function () {
+    $(document).on('click','#update_date',function () {
         var form=new FormData();
         form.append('id',id);
         form.append('start_at',$('#calendar-start_at').val());
@@ -130,9 +130,9 @@ $(function() {
     //view data update
     $(document).on('click','.fc-content',function () {
         clean();
-        $('.btn-success').hide();
-        $('.btn-primary').show();
-        $('.btn-danger').show();
+        $('#create_date').hide();
+        $('#update_date').show();
+        $('#remove_date').show();
 
         $('#modal').modal('show')
             .find('#modal-content')
@@ -227,7 +227,7 @@ $(function() {
 
 
     //add data calendar
-    $(document).on('click','.btn-success',function () {
+    $(document).on('click','#create_date',function () {
 
         clean();
         var form=new FormData();

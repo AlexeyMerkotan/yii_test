@@ -51,11 +51,11 @@ $datePickerRange = (date('Y') - 100) . ':' . date('Y');
 <?= $form->field($calendar, 'comment')->textarea(['rows' => 6]) ?>
 
 
-<button type="button" class="btn btn-success">Create</button>
+<button type="button" id="create_date" class="btn btn-success">Create</button>
 
-<button type="button" class="btn btn-primary">Update</button>
+<button type="button" id="update_date" class="btn btn-primary">Update</button>
 
-<button type="button" class="btn btn-danger" data-dismiss="modal">Delete</button>
+<button type="button" id="remove_date" class="btn btn-danger" data-dismiss="modal">Delete</button>
 
 
 

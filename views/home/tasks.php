@@ -51,7 +51,7 @@ $this->title = 'Task';
     <div  class="col-md-12 col-sm-12 col-xs-12" style="padding-bottom: 15px;">
         <div class="row">
             <div class="col-md-6 col-md-offset-3">
-                <button id="filter" type="button" class="btn btn-default">Filter</button>
+                <button type="button" class="btn btn-default" onclick="todo.filter();">Filter</button>
             </div>
         </div>
 
