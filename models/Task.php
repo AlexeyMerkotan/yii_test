@@ -44,20 +44,8 @@ class Task extends \yii\db\ActiveRecord
             [['id_user'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['id_user' => 'id']],
 
 
-            [['start_at','end_at'], 'date', 'format' => 'yyyy-MM-dd HH:mm','on' => self::SCENARIO_DATA],
+            [['start_at','end_at'], 'date', 'format' => 'yyyy-MM-dd HH:mm'],
         ];
-    }
-
-    const SCENARIO_DATA = 'data';
-
-    public function scenarios()
-    {
-        if(!(integer)$this->start_at || !(integer)$this->end_at)
-            if (!empty($this->start_at)&&!empty($this->end_at)) {
-                $this->start_at = strtotime($this->start_at);
-                $this->end_at=strtotime($this->end_at);
-            }
-        return parent::scenarios();
     }
 
 

@@ -3,7 +3,7 @@ var id;
 var user;
 
 
-function Select_Project(select) {
+function Select_Project_main(select) {
     $.get('index.php?r=modelview%2Fselect',{'select':select},function(date){
         var project=$.parseJSON(date);
         $('#calendar-id_project').html('');
@@ -143,7 +143,7 @@ $(function() {
             $.each(project, function(key, value) {
                 if(key=='id_user'){
                     $('#calendar-id_user').val(value);
-                    Select_Project(value);
+                    Select_Project_main(value);
                 }
                 if(key=='id_project'){
                     $('#calendar-id_project').val(value);
@@ -213,6 +213,7 @@ $(function() {
                             end: value.end_at,
                             color:value.color,
                         };
+
                         $('#calendar').fullCalendar('renderEvent', eventData, true);
                     })
                 }

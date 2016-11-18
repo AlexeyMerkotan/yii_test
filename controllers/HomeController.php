@@ -82,27 +82,40 @@ class HomeController extends \yii\web\Controller
 
         if(!Yii::$app->user->isGuest) {
 
+            if(Yii::$app->user->identity->role==User::admin){
+                $task=new Task();
+                $project=Project::find()->all();
+                $authors = User::find()->all();
+                $items = ArrayHelper::map($authors,'id','name');
+                return $this->render('tasks',[
+                    'project' => $project,
+                    'items' => $items,
+                    'task'  =>  $task,
 
-            $task=new Task();
+                ]);
+            }else{
+                $task=new Task();
+                $id_user=Yii::$app->user->identity->id;
+                $project=Project::find()->where(['id_user' => $id_user])->all();
+                $authors = User::find()->all();
+                $items = ArrayHelper::map($authors,'id','name');
+                return $this->render('tasks',[
+                    'project' => $project,
+                    'items' => $items,
+                    'task'  =>  $task,
 
-            $project=Project::find()->all();
-            $authors = User::find()->all();
-            $items = ArrayHelper::map($authors,'id','name');
-            return $this->render('tasks',[
-                'project' => $project,
-                'items' => $items,
-                'task'  =>  $task,
+                ]);
+            }
 
-            ]);
-        }
-        else{
+        } else{
             return $this->redirect(['/login']);
         }
 
     }
 
     public function actionTaskscreate(){
-        if(!Yii::$app->user->isGuest) {
+        if(Yii::$app->user->identity->role==User::admin)
+        {
 
             $task=new Task();
             $task->load(\Yii::$app->request->post(),'');
@@ -116,75 +129,95 @@ class HomeController extends \yii\web\Controller
                 echo Json::encode($array);
             }
         }
-        else{
-            return $this->redirect(['/login']);
-        }
     }
 
     public  function actionTasksview()
     {
-        $task=Task::find()->all();
-        $arr=[];
-        foreach ($task as $value)
+        if(Yii::$app->user->identity->role==User::admin)
         {
-            $array = [
-                'id'=>$value->id,
-                'name'=>$value->name,
-                'id_user'=>$value->id_user,
-                'id_project'=>$value->id_project,
-                'description'=>$value->description,
-                'priority'=>$value->priority,
-                'task_status'=>$value->task_status,
-                'start_at'=>date('Y-m-d\TH:i:s\Z',$value->start_at),
-                'end_at'=>date('Y-m-d\TH:i:s\Z',$value->end_at),
-            ];
-            $arr[]=$array;
+            $task=Task::find()->all();
+            $arr=[];
+            foreach ($task as $value)
+            {
+                $array = [
+                    'id'=>$value->id,
+                    'name'=>$value->name,
+                    'id_user'=>$value->id_user,
+                    'id_project'=>$value->id_project,
+                    'description'=>$value->description,
+                    'priority'=>$value->priority,
+                    'task_status'=>$value->task_status,
+                    'start_at'=>date('Y-m-d\TH:i:s\Z',$value->start_at),
+                    'end_at'=>date('Y-m-d\TH:i:s\Z',$value->end_at),
+                ];
+                $arr[]=$array;
+            }
+            echo Json::encode($arr);
+        }else{
+            $task=Task::find()->where(['id_user' => Yii::$app->user->identity->id])->all();
+            $arr=[];
+            foreach ($task as $value)
+            {
+                $array = [
+                    'id'=>$value->id,
+                    'name'=>$value->name,
+                    'id_user'=>$value->id_user,
+                    'id_project'=>$value->id_project,
+                    'description'=>$value->description,
+                    'priority'=>$value->priority,
+                    'task_status'=>$value->task_status,
+                    'start_at'=>date('Y-m-d\TH:i:s\Z',$value->start_at),
+                    'end_at'=>date('Y-m-d\TH:i:s\Z',$value->end_at),
+                ];
+                $arr[]=$array;
+            }
+            echo Json::encode($arr);
         }
-        echo Json::encode($arr);
+
+
     }
 
     public function actionDetermine($id){
-        if((integer)$id){
-            $task = Task::findOne($id);
-            $array = [
-                'id'=>$task->id,
-                'name'=>$task->name,
-                'id_user'=>$task->id_user,
-                'id_project'=>$task->id_project,
-                'description'=>$task->description,
-                'priority'=>$task->priority,
-                'start_at'=>date('Y-m-d\TH:i:s\Z',$task->start_at),
-                'end_at'=>date('Y-m-d\TH:i:s\Z',$task->end_at),
-            ];
-            echo Json::encode($array);
+        if(Yii::$app->user->identity->role==User::admin) {
+            if ((integer)$id) {
+                $task = Task::findOne($id);
+                $array = [
+                    'id' => $task->id,
+                    'name' => $task->name,
+                    'id_user' => $task->id_user,
+                    'id_project' => $task->id_project,
+                    'description' => $task->description,
+                    'priority' => $task->priority,
+                    'start_at' => date('Y-m-d\TH:i:s\Z', $task->start_at),
+                    'end_at' => date('Y-m-d\TH:i:s\Z', $task->end_at),
+                ];
+                echo Json::encode($array);
+            }
         }
     }
 
     public function actionUpdate(){
-
-        $task=Task::findOne(\Yii::$app->request->post('id'));
-        $task->load(\Yii::$app->request->post(),'');
-        $task->save();
-        echo  Json::encode($task);
+        if(Yii::$app->user->identity->role==User::admin) {
+            $task = Task::findOne(\Yii::$app->request->post('id'));
+            $task->load(\Yii::$app->request->post(), '');
+            $task->save();
+            echo Json::encode($task);
+        }
     }
 
     //delete date calendar
-    public function actionDelete()
-    {
-        Task::findOne(\Yii::$app->request->post('id'))->delete();
+    public function actionDelete(){
+        if(Yii::$app->user->identity->role==User::admin)
+            Task::findOne(\Yii::$app->request->post('id'))->delete();
     }
 
     public function actionTaskstatus($id, $status)
     {
         $task=Task::findOne($id);
         $task->task_status=$status;
-
-        if ($task->validate()) {
-            $task->save();
-        } else {
-            $errors = $task->errors;
-        }
-        print_r($errors);
+        $task->start_at=date('Y-m-d H:m',$task->start_at);
+        $task->end_at=date('Y-m-d H:m',$task->end_at);
+        $task->save();
     }
 
 

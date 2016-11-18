@@ -39,6 +39,7 @@ $datePickerRange = (date('Y') - 100) . ':' . date('Y');
                 'id' => 'calendar',
                 'options' => ['enctype' => 'multipart/form-data'],
                 'clientOptions' => [
+                    'firstDay'=>1,
                     'eventClick' => TRUE,
                     'eventClick'=>new \yii\web\JsExpression('function(event, element) {    
                                 id=event.id;          
